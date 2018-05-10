@@ -16,8 +16,6 @@ import scala.concurrent.duration.Duration
  */
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents, dBService: DBService) extends AbstractController(cc) {
-  val db = dBService.DB
-  val dbConfig = dBService.dbConfig
   /**
    * Create an Action to render an HTML page.
    *
@@ -25,9 +23,7 @@ class HomeController @Inject()(cc: ControllerComponents, dBService: DBService) e
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  import dbConfig.profile.api._
   def index() = Action { implicit request: Request[AnyContent] =>
-//    val count:Int = Await.result(db.run(sql"""SELECT COUNT(1) FROM position_info""".as[Int]),Duration.Inf).headOption.get
     Ok(views.html.index("test"))
   }
 }

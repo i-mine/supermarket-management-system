@@ -8,9 +8,8 @@ import slick.jdbc.JdbcProfile
 /**
   * author: dulei
   * date: 18-5-8
-  * desc: 提供slick执行需要的db
+  * desc: 提供操作各个Bean数据的Service
   */
-class DBService @Inject()(dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfig[JdbcProfile] {
-  override val dbConfig = dbConfigProvider.get[JdbcProfile]
-  val DB = db
+class DBService @Inject()(staffDBService: StaffDBService)  {
+  val staff_DB = staffDBService
 }
