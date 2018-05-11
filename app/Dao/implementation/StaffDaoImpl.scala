@@ -1,16 +1,15 @@
 package Dao.implementation
 
 import javax.inject.Inject
-
 import Dao.`trait`.StaffDao
-import models.StaffInfoSchema
+import models.{Staff, StaffInfoSchema}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
+
 
 /**
   * author: dulei
@@ -22,10 +21,10 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
 
   import dbConfig.profile.api._
 
-  val staff = TableQuery[StaffInfoTable]
+  val staffInfos = TableQuery[StaffInfoTable]
 
   override def check(username: String, password: String): Future[Boolean] = {
-    db.run(staff.filter(staff => staff.staffName === username && staff.password === password).result.headOption).map(
+    db.run(staffInfos.filter(staff => staff.staffName === username && staff.password === password).result.headOption).map(
       res => {
         if (res.get.staffId > 0) true
         else false
@@ -33,4 +32,7 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
     )
   }
 
+  override def get(username: String): Future[Option[Staff]] = {
+    db.run(staffInfos.filter(staff => staff.staffName === username).result.headOption)
+  }
 }

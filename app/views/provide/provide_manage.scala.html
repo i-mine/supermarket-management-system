@@ -1,0 +1,49 @@
+@(provides: Seq[Provide])
+@layout("供应商管理"){
+    <div class="layui-container">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5%">
+        <legend>供应商列表</legend>
+    </fieldset>
+
+        <div style="margin-top: 20px;">
+            <a class="layui-btn" href="/provide_add_page">添加</a>
+            <a class="layui-btn" href="/provide_list">刷新</a>
+        </div>
+    <div class="layui-form">
+        <table class="layui-table">
+            <colgroup>
+                <col width="10">
+                <col width="250">
+                <col width="200">
+                <col width="150">
+                <col width="150">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>供应商名字</th>
+                    <th>供应商地址</th>
+                    <th>供应商电话</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(provide <- provides){
+                    <tr>
+                        <td>@provide.provideId</td>
+                        <td>@provide.provideName</td>
+                        <td>@provide.provideAddress</td>
+                        <td>@provide.providePhone</td>
+                        <td>
+                            <a href="@routes.ProvideController.provideUpdatePage(provide.provideId)" class="layui-btn layui-btn-xs">修改</a>
+                            <span style="margin: 0 10px;">|</span>
+                            <a href="@routes.ProvideController.provideDelete(provide.provideId)" class="layui-btn layui-btn-xs">删除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    </div>
+}

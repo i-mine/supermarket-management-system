@@ -1,0 +1,32 @@
+@(data: Provide)(implicit request: RequestHeader)
+@import helper._
+@layout("修改"){
+    <body style="background-color: #393D49;">
+        <div class="layui-container" style="padding:30px;">
+            <h2 style="color: whitesmoke">请修改供应商信息</h2>
+            <br>
+            <form role="form"  class="layui-form" action="/provide_add" method="post" style="background-color:whitesmoke">
+                <div style="margin:0 30%;padding: 10px 20px;">
+                    <div class="layui-form-item" style="width: 250px">
+                        <label class="layui-form-label">供应商名字:</label>
+                        <input type="text" class="layui-input" name="provideName" placeholder="" value="@data.provideName" />
+                    </div>
+                    <div class="layui-form-item" style="width: 250px">
+                        <label class="layui-form-label">供应商地址:</label>
+                        <input type="text" class="layui-input" name="provideAddress" placeholder="" value="@data.provideAddress"/>
+                    </div>
+                    <div class="layui-form-item" style="width: 250px">
+                        <label class="layui-form-label">供应商电话:</label>
+                        <input type="text" class="layui-input" name="providePhone" placeholder="" value="@data.providePhone"/>
+                    </div>
+                    @CSRF.formField
+                    &ensp;&ensp;
+                    <button type="submit" class="layui-btn">Submit</button>
+                    &ensp;&ensp;&ensp;&ensp;
+                    <a href="/provide_list" class="layui-btn">Return</a>
+                </div>
+
+            </form>
+        </div>
+    </body>
+}

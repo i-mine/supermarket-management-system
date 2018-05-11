@@ -26,4 +26,6 @@ class HomeController @Inject()(cc: ControllerComponents, dBService: DBService) e
   def index() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index("test"))
   }
+
+
 }

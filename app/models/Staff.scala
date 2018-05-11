@@ -63,12 +63,4 @@ trait StaffInfoSchema {
   }
 
 }
-//class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends StaffDao with StaffInfoSchema with HasDatabaseConfig[JdbcProfile]{
-//  override protected val dbConfig = dbConfigProvider.get[JdbcProfile]
-//  import dbConfig.profile.api._
-//  override def check(user:String,password:String): Boolean = {
-//
-//    return true
-//  }
-//
-//}
+
