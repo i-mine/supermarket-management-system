@@ -32,7 +32,7 @@ class ProvideController @Inject()(cc: ControllerComponents, dBService: DBService
     val authority = request.session.get("authority").get
     dBService.provide_DB.listAllProvide.map(
       res => {
-        authority.charAt(1) match {//权限验证
+        authority.charAt(5) match {//权限验证
           case '1' => Ok(views.html.provide.provide_manage(res))
           case _ => BadRequest("Sorry,you don't have authority")
         }

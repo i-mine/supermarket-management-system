@@ -35,4 +35,34 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
   override def get(username: String): Future[Option[Staff]] = {
     db.run(staffInfos.filter(staff => staff.staffName === username).result.headOption)
   }
+
+  override def get(id: Long): Future[Option[Staff]] = {
+    db.run(staffInfos.filter(_.staffId === id).result.headOption)
+  }
+
+  override def listAll(args: String*): Future[Seq[Staff]] = {
+    if(args.length == 1){
+      for(arg <- args){
+        return db.run(staffInfos.filter(_.staffName.like(s"%$arg%")).result)
+      }
+    }
+    db.run(staffInfos.result)
+  }
+
+  override def update(newStaff: Staff): Future[String] = {
+    db.run(staffInfos.filter(_.staffId === newStaff.staffId).update(newStaff)
+    ).map(res => "staff info update successfully").recover{
+      case ex: Exception => ex.getCause.getMessage
+    }
+  }
+
+  override def add(staff: Staff): Future[String] = {
+    db.run(staffInfos += staff).map(res=>"staff info add successfully").recover{
+      case ex: Exception => ex.getCause.getMessage
+    }
+  }
+
+  override def delete(id: Long): Future[Int] = {
+    db.run(staffInfos.filter(_.staffId === id).delete)
+  }
 }
