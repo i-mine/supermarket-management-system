@@ -3,6 +3,7 @@ package controllers
 import javax.inject._
 import play.api.mvc._
 import services.DBService
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -23,7 +24,7 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
     dBService.staff_DB.listAllUser().map(
       res => {
         authority.charAt(6) match {//权限验证
-          case '1' => Ok("")//TODO 添加View
+          case '1' => Ok(views.html.staff.staff_manage(res))
           case _ => BadRequest("Sorry,you don't have authority")
         }
 

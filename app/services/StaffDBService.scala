@@ -2,7 +2,7 @@ package services
 
 import javax.inject.{Inject, Singleton}
 import Dao.implementation.StaffDaoImpl
-import models.Staff
+import models.{Staff, StaffTable}
 
 import scala.concurrent.Future
 
@@ -26,7 +26,7 @@ class StaffDBService @Inject()(staffDaoImpl: StaffDaoImpl) {
     staffDaoImpl.get(id)
   }
 
-  def listAllUser(): Future[Seq[Staff]] = {
+  def listAllUser(): Future[Seq[StaffTable]] = {
     staffDaoImpl.listAll()
   }
 
@@ -38,7 +38,7 @@ class StaffDBService @Inject()(staffDaoImpl: StaffDaoImpl) {
     staffDaoImpl.update(newStaff)
   }
 
-  def search(staffName: String): Future[Seq[Staff]] = {
+  def search(staffName: String): Future[Seq[StaffTable]] = {
     staffDaoImpl.listAll(staffName)
   }
 

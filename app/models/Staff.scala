@@ -1,10 +1,4 @@
 package models
-
-import javax.inject.Inject
-
-import Dao.`trait`.StaffDao
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
-import services.DBService
 import slick.jdbc.JdbcProfile
 
 
@@ -36,10 +30,35 @@ case class Staff(staffId: Long,
                  authority: String
                 )
 
+/**
+  * desc:用于展示职员特定的信息
+  */
+case class StaffTable(staffId: String,
+                      position: String,
+                      staffName: String,
+                      gender: String,
+                      teleNumber: String,
+                      address: String)
+
+/**
+  *desc:用于添加或修改职员时需要填写的表单
+  */
+case class StaffFormData(staffName: String,
+                         position: String,
+                         password: String,
+                         gender: String,
+                         teleNumber: String,
+                         address: String
+                        )
+
+/**
+  * desc:用于填写登录表单
+  */
 case class LoginFormData(username: String, password: String)
 
 trait StaffInfoSchema {
   protected val driver: JdbcProfile
+
   import driver.api._
 
   class StaffInfoTable(tag: Tag) extends Table[Staff](tag, "staff_info") {
@@ -61,6 +80,6 @@ trait StaffInfoSchema {
 
     def * = (staffId, positionId, staffName, gender, teleNumber, address, password, authority) <> (Staff.tupled, Staff.unapply)
   }
-
 }
+
 

@@ -1,1 +1,54 @@
-@()
+@(staffs : Seq[StaffTable])
+@layout("人员管理"){
+    <div class="layui-container">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5%">
+            <legend>职员列表</legend>
+        </fieldset>
+
+        <div style="margin-top: 20px;">
+            <a class="layui-btn" href="#">添加</a>
+            <a class="layui-btn" href="/staff_list">刷新</a>
+        </div>
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="50">
+                    <col width="150">
+                    <col width="100">
+                    <col width="150">
+                    <col width="250">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>职称</th>
+                        <th>名字</th>
+                        <th>性别</th>
+                        <th>电话</th>
+                        <th>住址</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(staff <- staffs){
+                    <tr>
+                        <td>@staff.staffId</td>
+                        <td>@staff.position</td>
+                        <td>@staff.staffName</td>
+                        <td>@staff.gender</td>
+                        <td>@staff.teleNumber</td>
+                        <td>@staff.address</td>
+                        <td>
+                            <a href="#" class="layui-btn layui-btn-xs">修改</a>
+                            <span style="margin: 0 10px;">|</span>
+                            <a href="#" class="layui-btn layui-btn-xs">删除</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+}

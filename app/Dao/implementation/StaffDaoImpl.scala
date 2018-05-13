@@ -2,11 +2,11 @@ package Dao.implementation
 
 import javax.inject.Inject
 import Dao.`trait`.StaffDao
-import models.{Staff, StaffInfoSchema}
+import models.{Staff, StaffInfoSchema, StaffTable}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import slick.jdbc.JdbcProfile
+import slick.jdbc.{GetResult, JdbcProfile}
 
 import scala.concurrent.Future
 
@@ -40,13 +40,14 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
     db.run(staffInfos.filter(_.staffId === id).result.headOption)
   }
 
-  override def listAll(args: String*): Future[Seq[Staff]] = {
+  override def listAll(args: String*): Future[Seq[StaffTable]] = {
+    implicit val getCoffeeResult = GetResult(r => StaffTable(r.<<, r.<<, r.<<, r.<<, r.<<,r.<<))
     if(args.length == 1){
       for(arg <- args){
-        return db.run(staffInfos.filter(_.staffName.like(s"%$arg%")).result)
+        return db.run(sql"""select * from view_staff_position where staff_name like %$arg%""".as[StaffTable])
       }
     }
-    db.run(staffInfos.result)
+    db.run(sql"""select * from view_staff_position """.as[StaffTable])
   }
 
   override def update(newStaff: Staff): Future[String] = {

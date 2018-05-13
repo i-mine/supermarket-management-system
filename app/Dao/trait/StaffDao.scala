@@ -1,6 +1,6 @@
 package Dao.`trait`
 
-import models.Staff
+import models.{Staff, StaffTable}
 
 import scala.concurrent.Future
 
@@ -16,7 +16,7 @@ trait StaffDao {
   //根据id获取用户
   def get(id: Long):Future[Option[Staff]]
   //根据给出的参数列出所有符合条件的职员
-  def listAll(args: String*): Future[Seq[Staff]]
+  def listAll(args: String*): Future[Seq[StaffTable]]
   //更新职员信息
   def update(staff: Staff):Future[String]
   //添加职员
