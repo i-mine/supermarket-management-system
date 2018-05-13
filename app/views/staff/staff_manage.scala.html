@@ -1,4 +1,5 @@
-@(staffs : Seq[StaffTable])
+@import helper._
+@(staffs : Seq[StaffTable])()(implicit request: RequestHeader)
 @layout("人员管理"){
     <div class="layui-container">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5%">
@@ -6,7 +7,7 @@
         </fieldset>
 
         <div style="margin-top: 20px;">
-            <a class="layui-btn" href="#">添加</a>
+            <a id="add" class="layui-btn" href="#">添加</a>
             <a class="layui-btn" href="/staff_list">刷新</a>
         </div>
         <div class="layui-form">
@@ -40,15 +41,72 @@
                         <td>@staff.teleNumber</td>
                         <td>@staff.address</td>
                         <td>
-                            <a href="#" class="layui-btn layui-btn-xs">修改</a>
+                            <a href="#" id="" class="layui-btn layui-btn-xs">修改</a>
                             <span style="margin: 0 10px;">|</span>
-                            <a href="#" class="layui-btn layui-btn-xs">删除</a>
+                            <a href="@routes.StaffController.staffDelete(staff.staffId)" class="layui-btn layui-btn-xs">删除</a>
                         </td>
                     </tr>
                 }
                 </tbody>
             </table>
-
         </div>
+    </div>
+    <script type="text/javascript">
+            layui.use('form', function() {
+                var form = layui.form();
+            });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#staff_form").hide();
+            layui.use('layer', function(){
+                var layer = layui.layer;
+                $(function() {
+                    $("#add").click(function() {
+                        layer.open({
+                            skin: 'layui-layer-lan',
+                            type: 1 //Page层类型
+                            ,
+                            area: ['600px', '600px'],
+                            title: false,
+                            shade: 0.6 //遮罩透明度
+                            ,
+                            maxmin: true //允许全屏最小化
+                            ,
+                            anim: 5 //0-6的动画形式，-1不开启
+                            ,
+                            content: $("#staff_form")
+
+                        });
+                    });
+                })
+            });
+        })
+    </script>
+    <div id="staff_form" class="center-block" style="padding: 40px;">
+        <form action="/staff_add" method="post" class="layui-form  layui-form-pane">
+            <label for="">员工姓名:	</label><input class="layui-input" name="staffName" type="text" id="staffName" value="" />
+            <label for="">密码:</label> <input class="layui-input" name="password" type="text" id="password" value="" />
+
+            <label>员工职称:</label>
+            <select name="position" class="layui-select">
+                <option value="超市管理员">超市管理员</option>
+                <option value="仓库管理员">仓库管理员</option>
+                <option value="系统管理员">系统管理员</option>
+                <option value="收银员">收银员</option>
+            </select>
+
+            <br />
+            <label for="">性别:</label>
+            <div class="layui-input-block">
+                <input name="gender" title="男" type="radio" checked="" value="m">
+                <input name="gender" title="女" type="radio" value="f">
+            </div>
+            <label for="">电话:	</label><input class="layui-input" name="teleNumber" type="text" id="Price" value="" />
+            <label for="">地址:	</label><input class="layui-input" name="address" type="text" id="Total" value="" />
+            <br /><br />
+            @CSRF.formField
+            <div class="text-center"><input type="submit" class="layui-btn" value="提交" /></div>
+        </form>
     </div>
 }

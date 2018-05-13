@@ -42,4 +42,8 @@ class StaffDBService @Inject()(staffDaoImpl: StaffDaoImpl) {
     staffDaoImpl.listAll(staffName)
   }
 
+  def addUser(newStaff:Staff): Future[String] = {
+    staffDaoImpl.add(newStaff)
+  }
+
 }

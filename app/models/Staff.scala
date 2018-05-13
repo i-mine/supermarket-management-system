@@ -33,7 +33,7 @@ case class Staff(staffId: Long,
 /**
   * desc:用于展示职员特定的信息
   */
-case class StaffTable(staffId: String,
+case class StaffTable(staffId: Long,
                       position: String,
                       staffName: String,
                       gender: String,
