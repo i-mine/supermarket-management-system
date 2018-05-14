@@ -1,0 +1,79 @@
+@import helper._
+@(data: Staff)(implicit request: RequestHeader)
+@layout("职员信息修改") {
+    <body>
+        <div id="staff_form" class="center-block" style="padding: 40px;">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>员工信息</legend>
+            </fieldset>
+            <form action="@routes.StaffController.staffUpdate(data.staffId)" method="post" class="layui-form  layui-form-pane">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">员工姓名</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="staffName" type="text" placeholder="请输入姓名" value="@data.staffName" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="password" type="text" placeholder="请输入密码" value="@data.password" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">员工职称</label>
+                    <div class="layui-input-block">
+                        <select name="position" class="layui-select" id="position">
+                            <option value="超市经理">超市经理</option>
+                            <option value="系统管理员">系统管理员</option>
+                            <option value="仓库管理员">仓库管理员</option>
+                            <option value="收银员">收银员</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block" id="gender">
+                        <input name="gender" title="男" type="radio" checked="" value="m">
+                        <input name="gender" title="女" type="radio" value="f">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电话</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="teleNumber" type="text" placeholder="请输入电话" value="@data.teleNumber" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">住址</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" name="address" type="text" placeholder="请输入住址" value="@data.address" />
+                    </div>
+                </div>
+
+                <br /><br />
+                @CSRF.formField
+                <div class="layui-form-item" style="text-align: center">
+                    <input type="submit" class="layui-btn" value="提交" />
+                </div>
+            </form>
+        </div>
+        <script>
+                layui.use('form', function () {
+                    var position = {
+                        "1":"超市经理",
+                        "2":"系统管理员",
+                        "3":"仓库管理员",
+                        "4":"收银员"
+                    };
+                    var form = layui.form;
+                    var selected = position[@data.positionId]
+                    var gender = "@data.gender"
+                    $("select[name='position']").find("option[value="+selected+"]").attr('selected', 'selected');
+                    $("#gender input[value="+gender+"]").attr("checked","checked");
+                    form.render();
+                });
+        </script>
+    </body>
+}

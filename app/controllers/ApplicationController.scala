@@ -50,7 +50,6 @@ class ApplicationController @Inject()(cc: ControllerComponents, dBService: DBSer
             case Some(staff) => {
               if (staff.password.equals(data.password)) {
                 //判断密码是否正确
-                println(staff.authority)
                 Ok(views.html.index(data.username))
                   .withSession(("authority", staff.authority))
               } else {

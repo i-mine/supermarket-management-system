@@ -54,10 +54,9 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
       "address" -> nonEmptyText
     )(StaffFormData.apply)(StaffFormData.unapply)
   )
-
-  def staffAdd() = Action.async { implicit request: Request[AnyContent] =>
     val positionMap = Map("超市管理员" -> 1, "系统管理员" -> 2, "仓库管理员" -> 3, "收银员" -> 4)
-    val authroityMap = Map("超市管理员" -> "111111111", "收银员" -> "110000000")
+    val authroityMap = Map("超市管理员" -> "111111111", "仓库管理员"-> "001010000","系统管理员"->"0000000001","收银员" -> "110000000")
+  def staffAdd() = Action.async { implicit request: Request[AnyContent] =>
     staffForm.bindFromRequest.fold(
       hasErrors => Future.successful(BadRequest("No data")),
       data => {
@@ -65,6 +64,26 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
         val authority = authroityMap.get(data.position).get
         val newStaff = Staff(0, posiitonId, data.staffName, data.gender.charAt(0), data.teleNumber, data.address, data.password, authority)
         dBService.staff_DB.addUser(newStaff).map(
+          res => Redirect("/staff_list")
+        )
+      }
+    )
+  }
+
+  def staffUpdatePage(id: Long) = Action.async{implicit request: Request[AnyContent] =>
+    dBService.staff_DB.getUser(id).map(
+      res => Ok(views.html.staff.staff_edit(res.get))
+    )
+  }
+
+  def staffUpdate(id: Long) = Action.async{implicit request: Request[AnyContent] =>
+    staffForm.bindFromRequest().fold(
+      hasErrors => Future.successful(BadRequest("No data")),
+      data => {
+        val posiitonId = positionMap.get(data.position).get
+        val authority = authroityMap.get(data.position).get
+        val newStaff = Staff(id, posiitonId, data.staffName, data.gender.charAt(0), data.teleNumber, data.address, data.password, authority)
+        dBService.staff_DB.updateUser(newStaff).map(
           res => Redirect("/staff_list")
         )
       }

@@ -5,7 +5,7 @@
         <div class="layui-container" style="padding:30px;">
             <h2 style="color: whitesmoke">请修改供应商信息</h2>
             <br>
-            <form role="form"  class="layui-form" action="/provide_add" method="post" style="background-color:whitesmoke">
+            <form role="form"  class="layui-form" action="@routes.ProvideController.provideUpdate(data.provideId)" method="post" style="background-color:whitesmoke">
                 <div style="margin:0 30%;padding: 10px 20px;">
                     <div class="layui-form-item" style="width: 250px">
                         <label class="layui-form-label">供应商名字:</label>
