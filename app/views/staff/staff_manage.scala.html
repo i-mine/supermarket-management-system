@@ -1,5 +1,5 @@
 @import helper._
-@(staffs : Seq[StaffTable])()(implicit request: RequestHeader)
+@(staffs : Seq[StaffTable])(implicit request: RequestHeader)
 @layout("人员管理"){
     <div class="layui-container">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5%">
@@ -48,10 +48,11 @@
                                         var update_id = '#update_@staff.staffId'
                                         $("body").on('click',update_id,function () {
                                             var iframe = layer.open({
+                                                closeBtn:2,
                                                 skin: 'layui-layer-lan',
                                                 type: 2 //iframe层类型
                                                 ,
-                                                area: ['700px', '600px'],
+                                                area: ['700px','450px'],
                                                 title: false,
                                                 shade: 0.6 //遮罩透明度
                                                 ,
@@ -59,10 +60,9 @@
                                                 ,
                                                 anim: 5 //0-6的动画形式，-1不开启
                                                 ,
-                                                content:[ '@routes.StaffController.staffUpdatePage(staff.staffId)','no']
+                                                content:[ '@routes.StaffController.staffUpdatePage(staff.staffId)']
 
                                             });
-                                            $
                                         })
                                     });
                             </script>
@@ -83,10 +83,11 @@
                 var layer = layui.layer;
                 $("body").on('click','#add',function () {
                     layer.open({
+                        closeBtn:2,
                         skin: 'layui-layer-lan',
                         type: 1 //Page层类型
                         ,
-                        area: ['600px', '600px'],
+                        area: ['700px','450px'],
                         title: false,
                         shade: 0.6 //遮罩透明度
                         ,

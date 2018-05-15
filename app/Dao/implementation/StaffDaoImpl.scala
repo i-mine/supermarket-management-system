@@ -41,7 +41,7 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
   }
 
   override def listAll(args: String*): Future[Seq[StaffTable]] = {
-    implicit val getCoffeeResult = GetResult(r => StaffTable(r.<<, r.<<, r.<<, r.<<, r.<<,r.<<))
+    implicit val getCoffeeResult = GetResult(r => StaffTable(r.<<, r.<<, r.<<, r.<<, r.<<,r.<<, r.<<))
     if(args.length == 1){
       for(arg <- args){
         return db.run(sql"""select * from view_staff_position where staff_name like %$arg%""".as[StaffTable])

@@ -34,7 +34,7 @@ class ProvideController @Inject()(cc: ControllerComponents, dBService: DBService
       res => {
         authority.charAt(5) match {//权限验证
           case '1' => Ok(views.html.provide.provide_manage(res))
-          case _ => BadRequest("Sorry,you don't have authority")
+          case _ => Redirect("/noAuthority")
         }
 
       }

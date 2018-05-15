@@ -7,6 +7,7 @@
 #GET     /                           controllers.HomeController.index
 GET         /welcome                        controllers.ApplicationController.welcome()
 GET         /                               controllers.ApplicationController.login()
+GET         /noAuthority                    controllers.ApplicationController.noAuthority()
 + nocsrf
 POST        /checklogin                     controllers.ApplicationController.checklogin()
 
@@ -22,5 +23,6 @@ GET         /staff_delete/:id               controllers.StaffController.staffDel
 POST        /staff_add                      controllers.StaffController.staffAdd()
 GET         /staff_update_page/:id          controllers.StaffController.staffUpdatePage(id: Long)
 POST        /staff_update/:id               controllers.StaffController.staffUpdate(id: Long)
+GET         /authority_page                 controllers.StaffController.authorityPage()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

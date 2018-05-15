@@ -1,0 +1,123 @@
+@import helper._
+@(staffs: Seq[StaffTable])(implicit request: RequestHeader)
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>权限管理</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <script src="/assets/javascripts/jquery-2.1.1.min.js"></script>
+        <link rel="stylesheet" href="/assets/layui/css/layui.css" media="all">
+        <script src="/assets/layui/layui.js" charset="utf-8"></script>
+        <style>
+                body{
+                    margin-bottom: 20px;
+                }
+                .authority {
+                    margin-left: 20px;
+                    display: inline-block;
+                }
+
+                .authority-user {
+                    display: inline-block;
+                    margin-top: -30px;
+                    padding: 10px;
+                    background-color: darkcyan;
+                    border-radius: 10px;
+                    color: white;
+                    box-shadow: 1px 1px 6px rgba(0, 0, 0, .6);
+                }
+
+                .item {
+                    box-shadow: 1px 1px 6px rgba(0, 0, 0, .6);
+                    background-color: whitesmoke;
+                }
+        </style>
+    </head>
+    <body>
+        @for(staff <- staffs) {
+            <div class="layui-container item" style="margin-top: 50px;">
+                <h3 class="authority-user">用户名：@staff.staffName </h3>
+                <h3 class="authority-user">职称: @staff.position </h3>
+                <form role="form" class="layui-form" action="/authority_update" method="post">
+                        <!--权限开关-->
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">收银</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="pay" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">会员管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="member_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">商品管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="merch_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">进货管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="instock_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">库存管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="stock_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">供应商管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="provide_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">人员管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="staff_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">销售统计</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="system_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority">
+                        <label class="layui-form-label">系统管理</label>
+                        <div class="layui-input-block checkbox-div-@staff.staffId">
+                            <input type="checkbox" name="system_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                        </div>
+                    </div>
+                    <div class="layui-form-item authority" style="margin-left: 50%;">
+                        @CSRF.formField
+                    <button type="submit" class="layui-btn">更新权限</button>
+                    </div>
+                </form>
+            </div>
+            <script>
+                layui.use('form', function () {
+                    var form = layui.form;
+                    var authority = '@staff.authority'
+                    var staffId = '@staff.staffId'
+                    for (var i = 0; i < authority.length+1; i++) {
+                        if (authority.charAt(i) == '1') {
+                            console.log(authority,'@staff.position',staffId,authority.charAt(i))
+                            $('.checkbox-div-'+ staffId +' input[value="1"]').eq(i).attr("checked", "checked");
+                        }
+                    }
+                    form.render();
+                });
+            </script>
+        }
+
+    </body>

@@ -1,4 +1,5 @@
 package models
+import akka.http.scaladsl.model.Uri.Authority
 import slick.jdbc.JdbcProfile
 
 
@@ -38,7 +39,9 @@ case class StaffTable(staffId: Long,
                       staffName: String,
                       gender: String,
                       teleNumber: String,
-                      address: String)
+                      address: String,
+                      authority: String
+                     )
 
 /**
   *desc:用于添加或修改职员时需要填写的表单

@@ -31,7 +31,7 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
         authority.charAt(6) match {
           //权限验证
           case '1' => Ok(views.html.staff.staff_manage(res))
-          case _ => BadRequest("Sorry,you don't have authority")
+          case _ => Redirect("/noAuthority")
         }
 
       }
@@ -54,8 +54,8 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
       "address" -> nonEmptyText
     )(StaffFormData.apply)(StaffFormData.unapply)
   )
-    val positionMap = Map("超市管理员" -> 1, "系统管理员" -> 2, "仓库管理员" -> 3, "收银员" -> 4)
-    val authroityMap = Map("超市管理员" -> "111111111", "仓库管理员"-> "001010000","系统管理员"->"000000001","收银员" -> "110000000")
+    val positionMap = Map("超市经理" -> 1, "系统管理员" -> 2, "仓库管理员" -> 3, "收银员" -> 4)
+    val authroityMap = Map("超市经理" -> "111111111", "仓库管理员"-> "001010000","系统管理员"->"000000001","收银员" -> "110000000")
   def staffAdd() = Action.async { implicit request: Request[AnyContent] =>
     staffForm.bindFromRequest.fold(
       hasErrors => Future.successful(BadRequest("No data")),
@@ -89,5 +89,20 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
       }
     )
   }
+
+  def authorityPage()= Action.async{implicit request: Request[AnyContent] =>
+    val authority = request.session.get("authority").get
+
+    dBService.staff_DB.listAllUser().map(
+      res => {
+        authority.charAt(6) match {
+          //权限验证
+          case '1' => Ok(views.html.staff.authority_manage(res))
+          case _ => Redirect("/noAuthority")
+        }
+      }
+    )
+  }
+  //TODO 权限更新Action
 
 }
