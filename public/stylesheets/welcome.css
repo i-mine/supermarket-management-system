@@ -1,0 +1,67 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Microsoft YaHei Light", "Microsoft YaHei", "Arial Narrow", Arial, "sans-serif" !important;
+    margin: 0;
+    font-weight: 500;
+}
+
+ul,
+ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    vertical-align: middle;
+    color: inherit;
+}
+
+body {
+    width: 1200px;
+    height: auto;
+    margin: 0 auto;
+    padding: 0;
+    position: relative;
+}
+
+div,
+span,
+p {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    margin: 20px auto;
+    height: 100px;
+    color: whitesmoke;
+    font-weight: 500;
+}
+
+#div1 {
+    overflow:hidden;
+    height: 250px;
+    vertical-align: middle;
+    background: #3F3F3F;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .6);
+}
+
+.box{
+    display: inline-block;
+    width: 550px;
+    height: 400px;
+    background: #D2D2D2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .6);
+}
+#div2 ul>li{
+    display: inline-block;
+    float: left;
+
+}

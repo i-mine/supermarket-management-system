@@ -55,7 +55,7 @@ class StaffController @Inject()(cc: ControllerComponents, dBService: DBService) 
     )(StaffFormData.apply)(StaffFormData.unapply)
   )
     val positionMap = Map("超市管理员" -> 1, "系统管理员" -> 2, "仓库管理员" -> 3, "收银员" -> 4)
-    val authroityMap = Map("超市管理员" -> "111111111", "仓库管理员"-> "001010000","系统管理员"->"0000000001","收银员" -> "110000000")
+    val authroityMap = Map("超市管理员" -> "111111111", "仓库管理员"-> "001010000","系统管理员"->"000000001","收银员" -> "110000000")
   def staffAdd() = Action.async { implicit request: Request[AnyContent] =>
     staffForm.bindFromRequest.fold(
       hasErrors => Future.successful(BadRequest("No data")),

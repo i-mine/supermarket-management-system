@@ -5,8 +5,9 @@
 
 # An example controller showing a sample home page
 #GET     /                           controllers.HomeController.index
+GET         /welcome                        controllers.ApplicationController.welcome()
 GET         /                               controllers.ApplicationController.login()
-
++ nocsrf
 POST        /checklogin                     controllers.ApplicationController.checklogin()
 
 GET         /provide_add_page               controllers.ProvideController.provideAddPage()

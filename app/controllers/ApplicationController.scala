@@ -23,7 +23,9 @@ class ApplicationController @Inject()(cc: ControllerComponents, dBService: DBSer
       "password" -> nonEmptyText
     )(LoginFormData.apply)(LoginFormData.unapply)
   )
-
+def welcome() = Action { implicit request: Request[AnyContent] =>
+  Ok(views.html.welcome())
+}
   /**
     * 跳转到登录界面
     *
