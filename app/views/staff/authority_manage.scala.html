@@ -13,6 +13,8 @@
         <script src="/assets/layui/layui.js" charset="utf-8"></script>
         <style>
                 body{
+                    width: 1200px;
+                    margin: 0 auto;
                     margin-bottom: 20px;
                 }
                 .authority {
@@ -37,11 +39,14 @@
         </style>
     </head>
     <body>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>员工权限管理</legend>
+        </fieldset>
         @for(staff <- staffs) {
-            <div class="layui-container item" style="margin-top: 50px;">
+            <div class="layui-container item" id="@staff.staffId" style="margin-top: 50px;">
                 <h3 class="authority-user">用户名：@staff.staffName </h3>
                 <h3 class="authority-user">职称: @staff.position </h3>
-                <form role="form" class="layui-form" action="/authority_update" method="post">
+                <form role="form" class="layui-form" action="@routes.StaffController.authorityUpdate(staff.staffId)" method="post">
                         <!--权限开关-->
                     <div class="layui-form-item authority">
                         <label class="layui-form-label">收银</label>
@@ -87,9 +92,9 @@
                         </div>
                     </div>
                     <div class="layui-form-item authority">
-                        <label class="layui-form-label">销售统计</label>
+                        <label class="layui-form-label">销售管理</label>
                         <div class="layui-input-block checkbox-div-@staff.staffId">
-                            <input type="checkbox" name="system_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
+                            <input type="checkbox" name="sale_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
                         </div>
                     </div>
                     <div class="layui-form-item authority">
@@ -100,8 +105,9 @@
                     </div>
                     <div class="layui-form-item authority" style="margin-left: 50%;">
                         @CSRF.formField
-                    <button type="submit" class="layui-btn">更新权限</button>
+                    <button lay-submit class="layui-btn" lay-filter="filter_@staff.staffId">更新权限</button>
                     </div>
+                    <input type="hidden" name="updatedAuthority" value="">
                 </form>
             </div>
             <script>
@@ -109,15 +115,36 @@
                     var form = layui.form;
                     var authority = '@staff.authority'
                     var staffId = '@staff.staffId'
-                    for (var i = 0; i < authority.length+1; i++) {
-                        if (authority.charAt(i) == '1') {
-                            console.log(authority,'@staff.position',staffId,authority.charAt(i))
-                            $('.checkbox-div-'+ staffId +' input[value="1"]').eq(i).attr("checked", "checked");
+                    for (var i = 0; i < authority.length; i++) {
+                        if (authority.charAt(i) === '1') {
+                            $('.checkbox-div-'+ staffId +' input[type="checkbox"]').eq(i).prop("checked", "checked");
                         }
                     }
                     form.render();
+                    //利用表单绑定事件，将checkbox的选择放入到隐藏域中
+                    var filter = 'filter_' + staffId;
+
+                    form.on('submit('+filter+')',function () {
+                        // console.log(data.field);
+                        // console.log(data.form);
+                        for (var j = 0; j < authority.length; j++) {
+                            var checkAttr = $('.checkbox-div-'+ staffId +' input[type="checkbox"]').eq(j).prop("checked");
+                            console.log(checkAttr);
+                            if(checkAttr){
+                                $("#"+staffId+" input[name='updatedAuthority']").attr("value",function (i,origValue) {
+                                    return origValue + "1";
+                                });
+
+                            }else{
+                                $("#"+staffId+" input[name='updatedAuthority']").attr("value",function (i,origValue) {
+                                    return origValue + "0";
+                                });
+                            }
+                        }
+                        // console.log(staffId,$("#"+staffId+" input[name='updatedAuthority']").attr("value"));
+                    });
+
                 });
             </script>
         }
-
     </body>

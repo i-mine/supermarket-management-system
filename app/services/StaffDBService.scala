@@ -42,8 +42,12 @@ class StaffDBService @Inject()(staffDaoImpl: StaffDaoImpl) {
     staffDaoImpl.listAll(staffName)
   }
 
-  def addUser(newStaff:Staff): Future[String] = {
+  def addUser(newStaff: Staff): Future[String] = {
     staffDaoImpl.add(newStaff)
+  }
+
+  def updateAuth(id: Long, newAuth: String): Future[Int] = {
+    staffDaoImpl.updateAuthority(id, newAuth)
   }
 
 }

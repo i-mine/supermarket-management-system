@@ -66,4 +66,8 @@ class StaffDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
   override def delete(id: Long): Future[Int] = {
     db.run(staffInfos.filter(_.staffId === id).delete)
   }
+
+  def updateAuthority(id:Long, authority:String):Future[Int] = {
+    db.run(staffInfos.filter(_.staffId === id).map(_.authority).update(authority))
+  }
 }

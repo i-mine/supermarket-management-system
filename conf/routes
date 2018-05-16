@@ -24,5 +24,6 @@ POST        /staff_add                      controllers.StaffController.staffAdd
 GET         /staff_update_page/:id          controllers.StaffController.staffUpdatePage(id: Long)
 POST        /staff_update/:id               controllers.StaffController.staffUpdate(id: Long)
 GET         /authority_page                 controllers.StaffController.authorityPage()
+POST        /authority_update/:id           controllers.StaffController.authorityUpdate(id: Long)
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

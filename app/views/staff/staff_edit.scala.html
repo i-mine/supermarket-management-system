@@ -70,8 +70,8 @@
                     var form = layui.form;
                     var selected = position[@data.positionId]
                     var gender = "@data.gender"
-                    $("select[name='position']").find("option[value="+selected+"]").attr('selected', 'selected');
-                    $("#gender input[value="+gender+"]").attr("checked","checked");
+                    $("select[name='position']").find("option[value="+selected+"]").prop('selected', 'selected');
+                    $("#gender input[value="+gender+"]").prop("checked","checked");
                     form.render();
                 });
         </script>
