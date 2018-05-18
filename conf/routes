@@ -28,5 +28,9 @@ POST        /authority_update/:id           controllers.StaffController.authorit
 # 会员管理
 GET         /member_manage                  controllers.MemberController.memberManage()
 POST        /member_page_list               controllers.MemberController.memberPage()
+POST        /member_add                     controllers.MemberController.memberAdd()
+GET         /member_delete/:id              controllers.MemberController.memberDelete(id: Long)
+POST        /member_get                     controllers.MemberController.memberGet()
+POST        /member_update                  controllers.MemberController.memberUpdate()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

@@ -19,7 +19,7 @@ trait MemberDao {
   //按照电话号码查询会员
   def listAll(args: String*): Future[Seq[Member]]
   //更新会员信息
-  def update(newMember: Member): Future[String]
+  def update(memberName: String,memberPhone: String,memberId: Long): Future[String]
   //获取会员数量
   def getCount():Int
 }

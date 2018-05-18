@@ -1,138 +1,255 @@
 @import helper._
 @(title: String)(implicit request: RequestHeader)
-@layout(title) {
-    <body class="layui-container">
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>会员信息</legend>
-        </fieldset>
-        <div>
-            <form action="/member_search" method="post" class="layui-form  layui-form-pane">
-                <div class="layui-form-item" style="display: inline-block">
-                    <label class="layui-form-label">会员查询</label>
-                    <div class="layui-input-block">
+    @layout(title) {
+        <body class="layui-container">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>会员信息</legend>
+            </fieldset>
+            <!--页面主体开始-->
+            <div>
+                <form action="/member_search" method="post" class="layui-form  layui-form-pane">
+                    <div class="layui-form-item" style="display: inline-block">
+                        <label class="layui-form-label">会员查询</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-inline">
+                                <input class="layui-input" name="memberPhone" type="text" placeholder="请输入电话号码" value="" />
+                            </div>
+                            @CSRF.formField
+                            <input type="submit" class="layui-btn" value="查询" /></input>
+                            <a id="add" class="layui-btn">添加</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <p id="memberCount" style="font-size: 18px;"></p>
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                        <col width="150">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>会员名字</th>
+                            <th>会员电话</th>
+                            <th>积分</th>
+                            <th>累计消费</th>
+                            <th>注册时间</th>
+                            <th>最后消费时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+                            <!--插入动态数据-->
+                    </tbody>
+                </table>
+            </div>
+            <div id="paged" class="" style="text-align: center"></div>
+            <!--页面主体完毕-->
+            <script>
+                    var token = '@CSRF.getToken.value';
+                    $(document).ready(function () {
+                        $("#add_form").hide();
+                        $("#update_form").hide();
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            $("body").on('click', '#add', function () {
+                                layer.open({
+                                    closeBtn: 2,
+                                    skin: 'layui-layer-lan',
+                                    type: 1 //Page层类型
+                                    ,
+                                    area: ['500px', '350px'],
+                                    title: false,
+                                    shade: 0.6 //遮罩透明度
+                                    ,
+                                    maxmin: true //允许全屏最小化
+                                    ,
+                                    anim: 5 //0-6的动画形式，-1不开启
+                                    ,
+                                    content: $("#add_form")
+                                });
+                            });
+                        });
+                        //ajax请求数据
+                        getdata();
+                        //分页渲染
+                        toPage();
+                    });
+                    //分页参数设置
+                    var startIndex = 0;//记录开始的索引
+                    var limitValue = 10;//每页显示的记录条数
+                    var currentPage = 1; //当前页数
+                    var dataLength = 0; //数据总条数
+                    function getdata() {
+                        $.ajax({
+                            type: "post",
+                            async: false,
+                            url: "/member_page_list?csrfToken=" + token,
+                            data: {
+                                start: startIndex,
+                                limit: limitValue
+                            },
+                            success: function (data, status) {
+                                result_rows = eval(data);
+                                console.log(result_rows);
+                                dataLength = data.total;
+                                parse_table(data.data);
+                                $("#memberCount").html("会员总数：" + dataLength);
+                            }
+                        });
+                    }
+
+                    function parse_table(data) {
+                        var rows = "";
+                        $.each(data, function (v, o) {
+                            rows += '<tr><td>' + o.memberId + '</td>';
+                            rows += '<td>' + o.memberName + '</td>';
+                            rows += '<td>' + o.memberPhone + '</td>';
+                            rows += '<td>' + o.integral + '</td>';
+                            rows += '<td>' + o.totalCost + '</td>';
+                            rows += '<td>' + parseDate(o.regDate) + '</td>';
+                            rows += '<td>' + parseDate(o.lastDate) + '</td>';
+                            rows += '<td><a href="javascript:void(0)"  class="layui-btn layui-btn-xs update" onclick="update(' + o.memberId + ')">修改</a><span style="margin: 0 10px;">|</span>';
+                            rows += '<a href="/member_delete/' + o.memberId + '" class="layui-btn layui-btn-xs">删除</a></td></tr>';
+                        })
+                        if (data.length > 0) {
+                            $("#table").html(rows);
+                        } else {
+                            $("#paged").hide();
+                            $("#table").html("<br><span style='width: 10%;height: 30px;display: block;margin: 0 auto'>暂无数据</span> ");
+                        }
+                    }
+
+                    function toPage() {
+                        layui.use(['laypage'], function () {
+                            var laypage = layui.laypage;
+                            var limit = limitValue;
+                            laypage.render({
+                                elem: 'paged',
+                                count: dataLength,
+                                limit: limit,
+                                curr: currentPage,
+                                skip: true,
+                                jump: function (obj, first) {
+                                    currentPage = obj.curr;
+                                    startIndex = (obj.curr - 1) * obj.limit;
+                                    if (!first) {
+                                        getdata();
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    function parseDate(timestamp) {
+                        var date = new Date(timestamp)
+                        Y = date.getFullYear() + '-';
+                        M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                        D = date.getDate() + ' ';
+                        // h = date.getHours() + ':';
+                        // m = date.getMinutes() + ':';
+                        // s = date.getSeconds();
+                        return Y + M + D;
+                    }
+
+                    function update(memberId) {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            var name = "";
+                            var phone ="";
+                            $.ajax({
+                                type: "post",
+                                async: false,
+                                url: "/member_get?csrfToken=" + token,
+                                data: {
+                                    id: memberId
+                                },
+                                success: function (member, status) {
+                                    name = member.memberName;
+                                    phone = member.memberPhone;
+                                }
+                            });
+                            $("#update_form").find("input[name='memberName']").prop("value",name);
+                            $("#update_form").find("input[name='memberPhone']").prop("value",phone);
+                            $("#update_form").find("input[name='memberId']").prop("value",memberId);
+                            layer.open({
+                                closeBtn: 2,
+                                skin: 'layui-layer-lan',
+                                type: 1 //Page层类型
+                                ,
+                                area: ['500px', '350px'],
+                                title: false,
+                                shade: 0.6 //遮罩透明度
+                                ,
+                                maxmin: true //允许全屏最小化
+                                ,
+                                anim: 5 //0-6的动画形式，-1不开启
+                                ,
+                                content: $("#update_form")
+                            });
+                        });
+                    }
+            </script>
+            <!--添加表单-->
+            <div id="add_form" style="text-align: center;padding: 40px;">
+                <form action="/member_add" method="post" class="layui-form  layui-form-pane">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;
+                        width: 300px;">
+                        <legend>会员信息</legend>
+                    </fieldset>
+                    <div class="layui-form-item" style="display: inline-block">
+                        <label class="layui-form-label">会员姓名</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name="memberName" type="text" placeholder="请输入姓名" value="" />
+                        </div>
+                    </div>
+                    <br>
+                    <div class="layui-form-item" style="display: inline-block">
+                        <label class="layui-form-label">会员电话</label>
                         <div class="layui-input-inline">
                             <input class="layui-input" name="memberPhone" type="text" placeholder="请输入电话号码" value="" />
                         </div>
-                        @CSRF.formField
-                        <input type="submit" class="layui-btn" value="查询" /></input>
-                        <button id="add" class="layui-btn">添加</button>
                     </div>
-                </div>
-            </form>
-        </div>
-
-        <div>
-            <table class="layui-table">
-                <colgroup>
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                    <col width="150">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>会员名字</th>
-                        <th>会员电话</th>
-                        <th>积分</th>
-                        <th>累计消费</th>
-                        <th>注册时间</th>
-                        <th>最后消费时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="table">
-                        <!--插入动态数据-->
-                </tbody>
-            </table>
-        </div>
-        <div id="paged" class="" style="text-align: center"></div>
-        <script>
-                var token = '@CSRF.getToken.value';
-                $(document).ready(function () {
-                    //ajax请求数据
-                    getdata();
-                    //分页渲染
-                    toPage();
-                });
-                //分页参数设置
-                var startIndex = 0;//记录开始的索引
-                var limitValue = 5;//每页显示的记录条数
-                var currentPage = 1; //当前页数
-                var dataLength = 0; //数据总条数
-                function getdata() {
-                    $.ajax({
-                        type: "post",
-                        async: false,
-                        url: "/member_page_list?csrfToken="+token,
-                        data: {
-                            start: startIndex,
-                            limit: limitValue
-                        },
-                        success: function (data, status) {
-                            result_rows = eval(data);
-                            console.log(result_rows);
-                            parse_table(data.data);
-                            dataLength = data.total;
-                        }
-                    });
-                }
-
-                function parse_table(data) {
-                    var rows = "";
-                    $.each(data, function (v, o) {
-                        rows += '<tr><td>' + o.memberId + '</td>';
-                        rows += '<td>' + o.memberName + '</td>';
-                        rows += '<td>' + o.memberPhone + '</td>';
-                        rows += '<td>' + o.integral + '</td>';
-                        rows += '<td>' + o.totalCost + '</td>';
-                        rows += '<td>' + parseDate(o.regDate) + '</td>';
-                        rows += '<td>' + parseDate(o.lastDate) + '</td>';
-                        rows += '<td><a href="" class="layui-btn layui-btn-xs">修改</a><span style="margin: 0 10px;">|</span>';
-                        rows += '<a href="" class="layui-btn layui-btn-xs">删除</a></td></tr>';
-                    })
-                    if(data.length > 0){
-                        $("#table").html(rows);
-                    }else {
-                        $("#paged").hide();
-                        $("#table").html("<br><span style='width: 10%;height: 30px;display: block;margin: 0 auto'>暂无数据</span> ");
-                    }
-                }
-
-                function toPage() {
-                    layui.use(['laypage'], function () {
-                        var laypage = layui.laypage;
-                        var limit = limitValue;
-                        laypage.render({
-                            elem: 'paged',
-                            count: dataLength,
-                            limit: limit,
-                            curr: currentPage,
-                            skip: true,
-                            jump: function (obj,first) {
-                                currentPage = obj.curr;
-                                startIndex = (obj.curr - 1) * obj.limit;
-                                if(!first){
-                                    getdata();
-                                }
-                            }
-                        });
-                    });
-                }
-                function parseDate(timestamp) {
-                    var date = new Date(timestamp)
-                    Y = date.getFullYear() + '-';
-                    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-                    D = date.getDate() + ' ';
-                    // h = date.getHours() + ':';
-                    // m = date.getMinutes() + ':';
-                    // s = date.getSeconds();
-                    return Y+M+D;
-                }
-        </script>
-    </body>
-}
+                    @CSRF.formField
+                    <div class="layui-form-item" style="text-align: center">
+                        <input type="submit" class="layui-btn" value="提交" /></input>
+                    </div>
+                </form>
+            </div>
+            <!--更新表单-->
+            <div id="update_form" style="text-align: center;padding: 40px;">
+                <form action="/member_update" method="post" class="layui-form  layui-form-pane">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;width: 300px;">
+                        <legend>会员信息</legend>
+                    </fieldset>
+                    <div class="layui-form-item" style="display: inline-block">
+                        <label class="layui-form-label">会员姓名</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name="memberName" type="text" placeholder="请输入姓名" value="" />
+                        </div>
+                    </div>
+                    <br>
+                    <div class="layui-form-item" style="display: inline-block">
+                        <label class="layui-form-label">会员电话</label>
+                        <div class="layui-input-inline">
+                            <input class="layui-input" name="memberPhone" type="text" placeholder="请输入电话号码" value="" />
+                        </div>
+                    </div>
+                    <input type="hidden" name="memberId" value="">
+                    @CSRF.formField
+                    <div class="layui-form-item" style="text-align: center">
+                        <input type="submit" class="layui-btn" value="提交" /></input>
+                    </div>
+                </form>
+            </div>
+        </body>
+    }

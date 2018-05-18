@@ -36,8 +36,8 @@ class MemberDBService @Inject()(memberDaoImpl: MemberDaoImpl) {
     memberDaoImpl.listAll(start.toString, limit.toString)
   }
 
-  def updateMember(newMember: Member): Future[String] = {
-    memberDaoImpl.update(newMember)
+  def updateMember(memberName: String,memberPhone: String,memberId: Long): Future[String] = {
+    memberDaoImpl.update(memberName, memberPhone, memberId)
   }
 
   def count:Int = {

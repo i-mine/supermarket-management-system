@@ -53,12 +53,13 @@ class MemberDaoImpl @Inject()()(dbConfigProvider: DatabaseConfigProvider) extend
     db.run(memberInfos.result)
   }
 
-  override def update(newMember: Member): Future[String] = {
-    db.run(memberInfos.filter(_.memberId === newMember.memberId).update(newMember)).map(
-      res => "member successfully updated"
+  override def update(memberName: String,memberPhone: String,memberId: Long): Future[String] = {
+    db.run(memberInfos.filter(_.memberId === memberId).map(res=> (res.memberName,res.memberPhone)).update(memberName,memberPhone)).map(
+      res=> "member updated successfully"
     ).recover{
       case ex: Exception => ex.getCause.getMessage
     }
+
   }
 
   override def getCount():Int = {
