@@ -10,7 +10,8 @@ import slick.jdbc.JdbcProfile
   * desc: 提供操作各个Bean数据的Service
   */
 @Singleton
-class DBService @Inject()(staffDBService: StaffDBService, provideService: ProvideService)  {
+class DBService @Inject()(staffDBService: StaffDBService, provideService: ProvideService, memberDBService: MemberDBService)  {
   val staff_DB = staffDBService
   val provide_DB = provideService
+  val member_DB = memberDBService
 }

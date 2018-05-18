@@ -1,7 +1,7 @@
 package untils
 
-import models.Provide
-import play.api.libs.json.Json
+import models.{Member, MemberPage, Provide}
+import play.api.libs.json._
 
 /**
   * author: dulei
@@ -10,4 +10,6 @@ import play.api.libs.json.Json
   */
 object JsonFormats {
   implicit val provideFormat = Json.format[Provide]
+  implicit val memberFormData =Json.format[Member]
+  implicit val memberPageFormat = Json.format[MemberPage]
 }

@@ -10,14 +10,14 @@ GET         /                               controllers.ApplicationController.lo
 GET         /noAuthority                    controllers.ApplicationController.noAuthority()
 + nocsrf
 POST        /checklogin                     controllers.ApplicationController.checklogin()
-
+# 供应商管理
 GET         /provide_add_page               controllers.ProvideController.provideAddPage()
 GET         /provide_update_page/:id        controllers.ProvideController.provideUpdatePage(id: Long)
 GET         /provide_list                   controllers.ProvideController.providelist()
 POST        /provide_add                    controllers.ProvideController.provideAdd()
 POST        /provide_update/:id             controllers.ProvideController.provideUpdate(id: Long)
 GET         /provide_delete/:id             controllers.ProvideController.provideDelete(id: Long)
-
+# 人员管理
 GET         /staff_list                     controllers.StaffController.stafflist()
 GET         /staff_delete/:id               controllers.StaffController.staffDelete(id: Long)
 POST        /staff_add                      controllers.StaffController.staffAdd()
@@ -25,5 +25,8 @@ GET         /staff_update_page/:id          controllers.StaffController.staffUpd
 POST        /staff_update/:id               controllers.StaffController.staffUpdate(id: Long)
 GET         /authority_page                 controllers.StaffController.authorityPage()
 POST        /authority_update/:id           controllers.StaffController.authorityUpdate(id: Long)
+# 会员管理
+GET         /member_manage                  controllers.MemberController.memberManage()
+POST        /member_page_list               controllers.MemberController.memberPage()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

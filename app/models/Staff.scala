@@ -1,5 +1,4 @@
 package models
-import akka.http.scaladsl.model.Uri.Authority
 import slick.jdbc.JdbcProfile
 
 
