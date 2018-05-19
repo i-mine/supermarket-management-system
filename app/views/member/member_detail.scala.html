@@ -1,0 +1,32 @@
+@(members: Seq[Member])
+@layout("会员详情") {
+    <body class="layui-container">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>会员详情</legend>
+        </fieldset>
+    @for(member <- members) {
+        <div class="layui-container" style="font-size: 18px;
+            margin-top: 50px">
+            <div style="background: whitesmoke;box-shadow: 0 3px 6px rgba(0, 0, 0, .6); padding: 40px;">
+                <p>会员ID: @member.memberId</p>
+                <br>
+                <p>会员姓名: @member.memberName</p>
+                <br>
+                <p>会员电话: @member.memberPhone</p>
+                <br>
+                <p>注册日期: @member.regDate</p>
+                <br>
+                <p>最后消费时间: @member.lastDate</p>
+                <br>
+                <p>总共消费: @member.totalCost</p>
+                <br>
+                <p>积分: @member.integral</p>
+            </div>
+        </div>
+        <div class="layui-container" style="text-align: center;margin-top: 10px;">
+            <a href="/member_manage" class="layui-btn">返回</a>
+        </div>
+
+    }
+    </body>
+}

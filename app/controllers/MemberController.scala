@@ -84,4 +84,12 @@ class MemberController @Inject()(cc: ControllerComponents, dBService: DBService)
 		)
 	}
 
+	def memberSearch() = Action.async{implicit request: Request[AnyContent] =>
+		val searchForm = Form(single("memberPhone" -> nonEmptyText))
+		val memberPhone = searchForm.bindFromRequest().get
+		dBService.member_DB.search(memberPhone).map(
+			res => Ok(views.html.member.member_detail(res))
+		)
+	}
+
 }
