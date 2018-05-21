@@ -27,11 +27,21 @@ GET         /authority_page                 controllers.StaffController.authorit
 POST        /authority_update/:id           controllers.StaffController.authorityUpdate(id: Long)
 # 会员管理
 GET         /member_manage                  controllers.MemberController.memberManage()
-POST        /member_search                 controllers.MemberController.memberSearch()
+POST        /member_search                  controllers.MemberController.memberSearch()
 POST        /member_page_list               controllers.MemberController.memberPage()
 POST        /member_add                     controllers.MemberController.memberAdd()
 GET         /member_delete/:id              controllers.MemberController.memberDelete(id: Long)
 POST        /member_get                     controllers.MemberController.memberGet()
 POST        /member_update                  controllers.MemberController.memberUpdate()
+# 商品管理
+GET         /merchType_list                 controllers.MerchController.merchTypeList()
+POST        /merchType_add                  controllers.MerchController.merchTypeAdd()
+GET         /merchType_delete/:id           controllers.MerchController.merchTypeDelete(id: Long)
+POST        /merchType_update               controllers.MerchController.merchTypeUpdate()
+
+GET         /merch_manage                   controllers.MerchController.merchManage()
+POST        /merch_page_list                controllers.MerchController.merchPage()
+POST        /merch_add                      controllers.MerchController.merchAdd()
+GET         /merch_delete/:id               controllers.MerchController.merchDelete(id: Long)
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

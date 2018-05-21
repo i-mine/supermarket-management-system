@@ -1,0 +1,109 @@
+@import helper._
+@(merchTypes: Seq[MerchType])(implicit request: RequestHeader)
+@layout("商品分类"){
+    <body class="layui-container">
+        <form action="/merchType_add" method="post" class="layui-form  layui-form-pane">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>商品类型信息</legend>
+            </fieldset>
+            <label class="layui-form-label">类型添加</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="merchTypeName" type="text" placeholder="请输入商品类型" value="" />
+                </div>
+                    &nbsp;&nbsp;
+                @CSRF.formField
+                <input type="submit" class="layui-btn" value="添加">
+            </div>
+        </form>
+        <br>
+        <br>
+        <div>
+            <table class="layui-table">
+                <colgroup>
+                    <col width="100">
+                    <col width="200">
+                    <col width="200">
+                    <col width="200">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商品类别</th>
+                        <th>录入数量</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                    @for(merchType <- merchTypes){
+                        <tr>
+                            <td>@merchType.merchTypeId</td>
+                            <td>@merchType.merchTypeName</td>
+                            <td>@merchType.merchTypeNum</td>
+                            <td><a href="@routes.MerchController.merchTypeDelete(merchType.merchTypeId)" class="layui-btn layui-btn-xs" id="add_@merchType.merchTypeId">删除</a>
+                                <span style="margin: 0 10px;">|</span>
+                            <a class="layui-btn layui-btn-xs"  onclick="update('@merchType.merchTypeId ','@merchType.merchTypeName')">更新</a></td>
+                        </tr>
+                        <script>
+                            $("body").on("click","#add_@merchType.merchTypeId",function () {
+                                var num = '@merchType.merchTypeNum';
+                                if(num === '0'){
+                                    alert("you can delete");
+                                }else{
+                                    alert("you can not delete");
+                                }
+                            });
+                        </script>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <div id="update_form" style="padding: 40px;">
+            <form action="/merchType_update" method="post" class="layui-form  layui-form-pane">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>商品类型信息</legend>
+                </fieldset>
+                <label class="layui-form-label">类型更新</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="merchTypeName" type="text" placeholder="" value="" />
+                    </div>
+                    <input type="hidden" name="merchTypeId" value="">
+                        &nbsp;&nbsp;
+                    @CSRF.formField
+                    <input type="submit" class="layui-btn" value="更新">
+                </div>
+            </form>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#update_form").hide();
+            });
+            function update(id, name) {
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    $("#update_form").find("input[name='merchTypeName']").prop("value",name);
+                    $("#update_form").find("input[name='merchTypeId']").attr("value",id);
+                    layer.open({
+                        closeBtn: 2,
+                        skin: 'layui-layer-lan',
+                        type: 1 //Page层类型
+                        ,
+                        area: ['500px', '250px'],
+                        title: false,
+                        shade: 0.6 //遮罩透明度
+                        ,
+                        maxmin: true //允许全屏最小化
+                        ,
+                        anim: 5 //0-6的动画形式，-1不开启
+                        ,
+                        content: $("#update_form")
+                    });
+                });
+            }
+        </script>
+    </body>
+}

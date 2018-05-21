@@ -12,7 +12,7 @@ import scala.concurrent.Future
   * desc: 
   */
 @Singleton
-class ProvideService @Inject()(provideDaoImpl: ProvideDaoImpl) {
+class ProvideDBService @Inject()(provideDaoImpl: ProvideDaoImpl) {
 
   def listAllProvide: Future[Seq[Provide]] = {
     provideDaoImpl.listAll()

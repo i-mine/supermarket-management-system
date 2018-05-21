@@ -62,7 +62,7 @@ class MemberController @Inject()(cc: ControllerComponents, dBService: DBService)
 
 	def memberGet() = Action.async{implicit request: Request[AnyContent] =>
 		val memberIdForm = Form(single("id" -> nonEmptyText))
-		import untils.JsonFormats.memberFormData
+		import untils.JsonFormats.memberFormat
 		val memberId = memberIdForm.bindFromRequest().get
 		dBService.member_DB.getMember(memberId.toLong).map(
 			res => Ok(Json.toJson[Member](res.get))
