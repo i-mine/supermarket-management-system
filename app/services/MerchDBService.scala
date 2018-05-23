@@ -2,7 +2,7 @@ package services
 
 import Dao.implementation.MerchDaoImpl
 import javax.inject.Inject
-import models.Merch
+import models.{Merch, UpdateMerch}
 
 import scala.concurrent.Future
 
@@ -32,8 +32,8 @@ class MerchDBService @Inject()(merchDaoImpl: MerchDaoImpl) {
 		merchDaoImpl.listAll(start,limit, searchValue)
 	}
 
-	def updateMerch(newMerch: Merch): Future[String] = {
-		merchDaoImpl.update(newMerch)
+	def updateMerch(updateMerch: UpdateMerch): Future[String] = {
+		merchDaoImpl.update(updateMerch)
 	}
 	def count(searchValue: String): Int = {
 		merchDaoImpl.getCount(searchValue)

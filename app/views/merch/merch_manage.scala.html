@@ -8,12 +8,12 @@
 
             <!--页面主体开始-->
         <div>
-            <form action="#" method="post" class="layui-form  layui-form-pane">
+            <form class="layui-form  layui-form-pane">
                 <div class="layui-form-item" style="display: inline-block">
                     <label class="layui-form-label">商品查询</label>
                     <div class="layui-input-block">
-                        <div class="layui-input-inline">
-                            <input class="layui-input" id="searchValue" name="searchValue" type="text" placeholder="商品类型ID、条形码、供应商ID" value="null" />
+                        <div class="layui-input-inline" style="width: 350px;" >
+                            <input class="layui-input" id="searchValue" name="searchValue" type="text" placeholder="商品名、商品类型ID、条形码、供应商ID" value="" />
                         </div>
 
                         <a id="searchButton" class="layui-btn" >查询</a>
@@ -63,6 +63,7 @@
             </table>
         </div>
         <div id="paged" class="" style="text-align: center"></div>
+
         <script>
                 //分页参数设置
                 var startIndex = 0;//记录开始的索引
@@ -72,7 +73,7 @@
                 var token = '@CSRF.getToken.value';
                 $(document).ready(function () {
                     $("#add_form").hide();
-                    // $("#update_form").hide();
+                    $("#update_form").hide();
                     //ajax请求数据
                     getdata();
                     //点击搜索时 搜索数据
@@ -118,7 +119,7 @@
                         rows += '<td>' + o.merchPrice + '</td>';
                         rows += '<td>' + o.salePrice + '</td>';
                         rows += '<td>' + o.provideId + '</td>';
-                        rows += '<td><a href="javascript:void(0)"  class="layui-btn layui-btn-xs update" onclick="update(' + o.memberId + ')">修改</a><span style="margin: 0 10px;">|</span>';
+                        rows += '<td><a href="javascript:void(0)"  class="layui-btn layui-btn-xs update" onclick="update(' + o.merchId + ')">修改</a><span style="margin: 0 10px;">|</span>';
                         rows += '<a href="/merch_delete/' + o.merchId + '" class="layui-btn layui-btn-xs">删除</a></td></tr>';
                     })
                     if (data.length > 0) {
@@ -126,7 +127,7 @@
                         $("#table").html(rows);
                     } else {
                         $("#paged").hide();
-                        $("#table").html("<br><span style='width: 10%;height: 30px;display: block;margin: 0 auto'>暂无数据</span> ");
+                        $("#table").html("<br><tr><td colspan='13'><h1 style='width:100%;height: 30px;display: block;text-align: center'><span>数据库未录入!</span></h1></td></tr>");
                     }
                 }
 
@@ -171,8 +172,66 @@
                         });
                     });
                 }
-                function update() {
+                function update(merchId) {
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        var merchTypeId = "";
+                        var merchName = "";
+                        var barcode = "";
+                        var cautionNum = "";
+                        var selfPreNum = "";
+                        var merchPrice = "";
+                        var salePrice = "";
+                        var planNum = "";
+                        var provideId = "";
 
+                        $.ajax({
+                            type: "post",
+                            async: false,
+                            url: "/merch_get?csrfToken=" + token,
+                            data: {
+                                id: merchId
+                            },
+                            success: function (merch, status) {
+                                merchTypeId = merch.merchTypeId;
+                                merchName = merch.merchName;
+                                barcode = merch.barcode;
+                                cautionNum = merch.cautionNum;
+                                selfPreNum = merch.selfPreNum;
+                                merchPrice = merch.merchPrice;
+                                salePrice = merch.salePrice;
+                                planNum = merch.planNum;
+                                provideId = merch.provideId;
+                            }
+                        });
+
+                        $("#update_form").find("input[name='merchId']").prop("value",merchId);
+                        $("#update_form").find("input[name='merchTypeId']").prop("value",merchTypeId);
+                        $("#update_form").find("input[name='merchName']").prop("value",merchName);
+                        $("#update_form").find("input[name='barcode']").prop("value",barcode);
+                        $("#update_form").find("input[name='cautionNum']").prop("value",cautionNum);
+                        $("#update_form").find("input[name='selfPreNum']").prop("value",selfPreNum);
+                        $("#update_form").find("input[name='merchPrice']").prop("value",merchPrice);
+                        $("#update_form").find("input[name='salePrice']").prop("value",salePrice);
+                        $("#update_form").find("input[name='planNum']").prop("value",planNum);
+                        $("#update_form").find("input[name='provideId']").prop("value",provideId);
+
+                        layer.open({
+                            closeBtn: 2,
+                            skin: 'layui-layer-lan',
+                            type: 1 //Page层类型
+                            ,
+                            area: ['500px', '450px'],
+                            title: false,
+                            shade: 0.6 //遮罩透明度
+                            ,
+                            maxmin: true //允许全屏最小化
+                            ,
+                            anim: 5 //0-6的动画形式，-1不开启
+                            ,
+                            content: $("#update_form")
+                        });
+                    });
                 }
         </script>
             <!--添加表单-->
@@ -183,6 +242,7 @@
                     width: 300px;">
                     <legend>商品信息</legend>
                 </fieldset>
+
                 <div class="layui-form-item" style="display: inline-block">
                     <label class="layui-form-label">商品类型</label>
                     <div class="layui-input-inline">
@@ -214,6 +274,7 @@
                         <input class="layui-input" name="salePrice" type="text" placeholder="请输入商品售价" value="" />
                     </div>
                 </div>
+
                 <div class="layui-form-item" style="display: inline-block">
                     <label class="layui-form-label">货架预设数量</label>
                     <div class="layui-input-inline">
@@ -224,6 +285,77 @@
                     <label class="layui-form-label">预设进货数量</label>
                     <div class="layui-input-inline">
                         <input class="layui-input" name="planNum" type="text" placeholder="请输入预设进货数量" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">供应商ID</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="provideId" type="text" placeholder="请输入供应商ID" value="" />
+                    </div>
+                </div>
+                @CSRF.formField
+                <div class="layui-form-item" style="text-align: center">
+                    <input type="submit" class="layui-btn" value="提交" /></input>
+                </div>
+            </form>
+        </div>
+
+        <div id="update_form" style="text-align: center;
+            padding: 40px;">
+            <form action="/merch_update" method="post" class="layui-form  layui-form-pane">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;
+                    width: 300px;">
+                    <legend>商品信息</legend>
+                </fieldset>
+                <input type="hidden" name="merchId" value="">
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">商品类型</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="merchTypeId" type="text" placeholder="请输入商品类型" value="" />
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">商品名字</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="merchName" type="text" placeholder="请输入商品名字" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">条形码</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="barcode" type="text" placeholder="请输入条形码" value="" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">商品进价</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="merchPrice" type="text" placeholder="请输入商品进价" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">商品售价</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="salePrice" type="text" placeholder="请输入商品售价" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">货架预设数量</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="selfPreNum" type="text" placeholder="请输入货架预设数量" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">预设进货数量</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="planNum" type="text" placeholder="请输入预设进货数量" value="" />
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">预警数量</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" name="cautionNum" type="text" placeholder="请输入库存预警数量" value="" />
                     </div>
                 </div>
                 <div class="layui-form-item" style="display: inline-block">

@@ -40,51 +40,82 @@ case class Merch(merchId: Long,
 
 /**
 	* desc: 用于填写商品信息表单
+	*
 	* @param merchTypeId 商品类型ID
-	* @param merchName 商品名字
-	* @param barcode 条形码
-	* @param merchPrice 商品进价
-	* @param salePrice 商品售价
-	* @param selfPreNum 货架预设数量
-	* @param planNum 预设进货数量
-	* @param provideId 供应商ID
+	* @param merchName   商品名字
+	* @param barcode     条形码
+	* @param merchPrice  商品进价
+	* @param salePrice   商品售价
+	* @param selfPreNum  货架预设数量
+	* @param planNum     预设进货数量
+	* @param provideId   供应商ID
 	*/
-case class MerchFormData( merchTypeId: Long,
-                          merchName: String,
-                          barcode: String,
-                          merchPrice: String,
-                          salePrice: String,
-                          selfPreNum: Int,
-                          planNum: Int,
-                          provideId: Long
+case class MerchFormData(merchTypeId: Long,
+                         merchName: String,
+                         barcode: String,
+                         merchPrice: String,
+                         salePrice: String,
+                         selfPreNum: Int,
+                         planNum: Int,
+                         provideId: Long
                         )
+
+case class UpdateMerch(
+	                      merchId: Long,
+	                      merchTypeId: Long,
+	                      merchName: String,
+	                      barcode: String,
+	                      cautionNum: Int,
+	                      selfPreNum: Int,
+	                      merchPrice: Float,
+	                      salePrice: Float,
+	                      planNum: Int,
+	                      provideId: Long
+                      )
+
 /**
 	* desc: 用于商品信息显示分页
+	*
 	* @param start 分页开始记录索引
 	* @param limit 单页记录数
-	* @param data 单页所有记录对象
+	* @param data  单页所有记录对象
 	* @param total 数据表中所有记录数量
 	*/
-case class MerchPage(start: Int,limit: Int, data: List[Merch], total: Int)
+case class MerchPage(start: Int, limit: Int, data: List[Merch], total: Int)
 
-trait MerchInfoSchema{
+trait MerchInfoSchema {
 	protected val driver: JdbcProfile
+
 	import driver.api._
 
-	class MerchInfoTable(tag: Tag) extends Table[Merch](tag, "merch_info"){
-		def merchId = column[Long]("merch_id",O.PrimaryKey, O.AutoInc)
+	class MerchInfoTable(tag: Tag) extends Table[Merch](tag, "merch_info") {
+		def merchId = column[Long]("merch_id", O.PrimaryKey, O.AutoInc)
+
 		def merchTypeId = column[Long]("merchtype_id")
+
 		def merchName = column[String]("merch_name")
+
 		def barcode = column[String]("barcode")
+
 		def stockNum = column[Int]("stock_num")
+
 		def cautionNum = column[Int]("caution_num")
+
 		def selfNum = column[Int]("shelf_num")
+
 		def selfPreNum = column[Int]("shelf_pre_num")
+
 		def merchPrice = column[Float]("merch_price")
+
 		def salePrice = column[Float]("sale_price")
+
 		def planNum = column[Int]("plan_num")
+
 		def alowSale = column[Boolean]("alow_sale")
+
 		def provideId = column[Long]("provide_id")
-		def * = (merchId,merchTypeId,merchName,barcode,stockNum,cautionNum,selfNum,selfPreNum,merchPrice,salePrice,planNum,alowSale,provideId) <> (Merch.tupled, Merch.unapply)
+
+		def * = (merchId, merchTypeId, merchName, barcode, stockNum, cautionNum, selfNum, selfPreNum, merchPrice, salePrice, planNum, alowSale, provideId) <> (Merch.tupled, Merch.unapply)
 	}
+
 }

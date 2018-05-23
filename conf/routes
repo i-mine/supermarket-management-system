@@ -43,5 +43,7 @@ GET         /merch_manage                   controllers.MerchController.merchMan
 POST        /merch_page_list                controllers.MerchController.merchPage()
 POST        /merch_add                      controllers.MerchController.merchAdd()
 GET         /merch_delete/:id               controllers.MerchController.merchDelete(id: Long)
+POST        /merch_update                   controllers.MerchController.merchUpdate()
+POST        /merch_get                      controllers.MerchController.merchGet()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
