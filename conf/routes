@@ -45,5 +45,12 @@ POST        /merch_add                      controllers.MerchController.merchAdd
 GET         /merch_delete/:id               controllers.MerchController.merchDelete(id: Long)
 POST        /merch_update                   controllers.MerchController.merchUpdate()
 POST        /merch_get                      controllers.MerchController.merchGet()
+#进货管理
+GET         /order_manage                   controllers.OrderController.orderManage()
+POST        /order_page_list                controllers.OrderController.orderPage()
+POST        /order_get                      controllers.OrderController.orderGet()
+POST        /order_update                   controllers.OrderController.orderUpdate()
+POST        /order_add                      controllers.OrderController.orderAdd()
+GET         /order_delete/:id               controllers.OrderController.orderDelete(id: Long)
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

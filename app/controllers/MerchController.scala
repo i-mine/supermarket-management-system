@@ -65,7 +65,7 @@ class MerchController @Inject()(cc: ControllerComponents, dBService: DBService) 
 	}
 
 	def merchPage() = Action.async { implicit request: Request[AnyContent] =>
-		import untils.JsonFormats.merchPageFormat
+		import utils.JsonFormats.merchPageFormat
 		val ajaxForm = Form(tuple("start" -> nonEmptyText, "limit" -> nonEmptyText, "searchValue" -> text))
 		val (start, limit, searchValue) = ajaxForm.bindFromRequest().get
 		val counts = dBService.merch_DB.count(searchValue)
@@ -155,7 +155,7 @@ class MerchController @Inject()(cc: ControllerComponents, dBService: DBService) 
 	}
 
 	def merchGet() = Action.async { implicit request: Request[AnyContent] =>
-		import untils.JsonFormats.merchFormat
+		import utils.JsonFormats.merchFormat
 		val id: Option[String] = request.body
 			.asFormUrlEncoded
 			.flatMap(m => m.get("id")

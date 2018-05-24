@@ -30,7 +30,7 @@ class MemberController @Inject()(cc: ControllerComponents, dBService: DBService)
 
 	//返回分页的member数据
 	def memberPage() = Action.async { implicit request: Request[AnyContent] =>
-		import untils.JsonFormats.memberPageFormat
+		import utils.JsonFormats.memberPageFormat
 		val ajaxForm = Form(tuple("start" -> number, "limit" -> number))
 		val (start, limit) = ajaxForm.bindFromRequest().get //获取分页数
 	val counts = dBService.member_DB.count //获取会员总数
@@ -60,7 +60,7 @@ class MemberController @Inject()(cc: ControllerComponents, dBService: DBService)
 
 	def memberGet() = Action.async{implicit request: Request[AnyContent] =>
 		val memberIdForm = Form(single("id" -> nonEmptyText))
-		import untils.JsonFormats.memberFormat
+		import utils.JsonFormats.memberFormat
 		val memberId = memberIdForm.bindFromRequest().get
 		dBService.member_DB.getMember(memberId.toLong).map(
 			res => Ok(Json.toJson[Member](res.get))

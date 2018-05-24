@@ -14,22 +14,10 @@
 
       <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-          <a href="javascript:;">@username</a>
-          <dl class="layui-nav-child">
-              <!-- 二级菜单 -->
-            <dd>
-              <a onclick="WeAdminShow('个人信息','http://www.baidu.com')">个人信息</a>
-            </dd>
-            <dd>
-              <a onclick="WeAdminShow('切换帐号','./login.html')">切换帐号</a>
-            </dd>
-            <dd>
-              <a class="loginout" href="/">退出</a>
-            </dd>
-          </dl>
+          <a href="javascript:;">用户:@username</a>
         </li>
         <li class="layui-nav-item to-index">
-          <a href="/">前台首页</a>
+          <a class="loginout" href="/">退出</a>
         </li>
       </ul>
 
@@ -81,7 +69,7 @@
             </a>
             <ul class="sub-menu">
               <li>
-                <a _href="./pages/order/list.html">
+                <a _href="/order_manage">
                   <i class="iconfont">&#xe6a7;</i>
                   <cite>订单列表</cite>
                 </a>

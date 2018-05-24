@@ -38,4 +38,6 @@ class MerchDBService @Inject()(merchDaoImpl: MerchDaoImpl) {
 	def count(searchValue: String): Int = {
 		merchDaoImpl.getCount(searchValue)
 	}
+
+
 }

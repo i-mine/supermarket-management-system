@@ -14,10 +14,12 @@ class DBService @Inject()(staffDBService: StaffDBService,
                           provideDBService: ProvideDBService,
                           memberDBService: MemberDBService,
                           merchTypeDBService: MerchTypeDBService,
-                          merchDBService: MerchDBService)  {
+                          merchDBService: MerchDBService,
+                          orderDBService: OrderDBService)  {
   val staff_DB = staffDBService
   val provide_DB = provideDBService
   val member_DB = memberDBService
   val merchType_DB = merchTypeDBService
   val merch_DB = merchDBService
+  val order_DB = orderDBService
 }

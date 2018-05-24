@@ -124,7 +124,7 @@
                     //利用表单绑定事件，将checkbox的选择放入到隐藏域中
                     var filter = 'filter_' + staffId;
 
-                    form.on('submit('+filter+')',function () {
+                    form.on('submit('+filter+')',function () {//返回已更改的权限：9位0/1字符串
                         // console.log(data.field);
                         // console.log(data.form);
                         for (var j = 0; j < authority.length; j++) {

@@ -1,4 +1,4 @@
-package untils
+package utils
 
 import models._
 import play.api.libs.json._
@@ -14,4 +14,8 @@ object JsonFormats {
   implicit val memberPageFormat = Json.format[MemberPage]
   implicit val merchFormat = Json.format[Merch]
   implicit val merchPageFormat = Json.format[MerchPage]
+  //新的分页风格
+  implicit val orderFormat = Json.format[Order]
+  implicit val orderPageFormat = Json.format[Page[Order]]
+  implicit val stockinFormat = Json.format[StockIn]
 }
