@@ -52,5 +52,15 @@ POST        /order_get                      controllers.OrderController.orderGet
 POST        /order_update                   controllers.OrderController.orderUpdate()
 POST        /order_add                      controllers.OrderController.orderAdd()
 GET         /order_delete/:id               controllers.OrderController.orderDelete(id: Long)
+#库存管理
+GET         /inhouse_manage                 controllers.WareHouseController.inHouseManage()
+GET         /outhouse_manage                controllers.WareHouseController.outHouseManage()
+POST        /inhouse_page_list              controllers.WareHouseController.inHousePage()
+GET         /inhouse_update/:id             controllers.WareHouseController.inHouseUpdate(id: Long)
+
+POST        /outhouse_page1_list            controllers.WareHouseController.outHousePage1()
+POST        /outhouse_page2_list            controllers.WareHouseController.outHousePage2()
+GET         /outhouse_insert                controllers.WareHouseController.insertOutHouse(barcode: String,merchNum: Int)
+GET         /outhouse_update/:id            controllers.WareHouseController.outHouseUpdate(id: Long)
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)

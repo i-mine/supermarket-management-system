@@ -1,0 +1,229 @@
+@import helper._
+@(title: String)(implicit request: RequestHeader)
+@layout(title) {
+    <body class="layui-container" style="width: 90%;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>出库清单</legend>
+        </fieldset>
+            <!--出库清单主体-->
+        <fieldset class="layui-elem-field">
+            <legend>说明</legend>
+            <div class="layui-field-box">
+                <ul>
+                    <li><p>点击【选择出库】,可以加入到出库记录中等待出库完成</p></li>
+                    <li><p>在出库记录中，点击【出库完成】,可以更新出库状态，将货物数量更新到货架上</p></li>
+                </ul>
+            </div>
+        </fieldset>
+        <hr class="layui-bg-green">
+        <div>
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>条形码</th>
+                        <th>商品名字</th>
+                        <th>当前货架数量</th>
+                        <th>货架预设数量</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table1">
+                        <!--插入动态数据-->
+                </tbody>
+            </table>
+            <div id="paged1" class="" style="text-align: center"></div>
+        </div>
+        <script>
+                //分页参数设置
+                var startIndex_page1 = 0;//记录开始的索引
+                var limitValue_page1 = 10;//每页显示的记录条数
+                var currentPage_page1 = 1; //当前页数
+                var dataLength_page1 = 0; //数据总条数
+                var token = '@CSRF.getToken.value';
+                $(document).ready(function () {
+                    //ajax请求数据
+                    getdata_page1();
+                    //分页渲染
+                    toPage_page1();
+                });
+
+                function getdata_page1() {
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/outhouse_page1_list?csrfToken=" + token,
+                        data: {
+                            start: startIndex_page1,
+                            limit: limitValue_page1,
+                        },
+                        success: function (data, status) {
+                            dataLength_page1 = data.total;
+                            parse_table_page1(data.data);
+                        }
+                    });
+                }
+
+                function parse_table_page1(data) {
+                    var rows = "";
+                    $.each(data, function (v, o) {
+                        rows += '<tr><td>' + o.barcode + '</td>';
+                        rows += '<td>' + o.merchName + '</td>';
+                        rows += '<td>' + o.shelfNum + '</td>';
+                        rows += '<td>' + o.shelfPreNum + '</td>';
+                        rows += '<td><a href="/outhouse_insert?barcode='+o.barcode+'&merchNum='+o.shelfPreNum+'"  class="layui-btn layui-btn-xs update">选择出库</a></tr>';
+                    });
+                    if (data.length > 0) {
+                        $("#paged1").show();
+                        $("#table1").html(rows);
+                    } else {
+                        $("#paged1").hide();
+                        $("#table1").html("<br><tr><td colspan='13'><h1 style='width:100%;height: 30px;display: block;text-align: center'><span>暂无需要出库的商品</span></h1></td></tr>");
+                    }
+                }
+
+                function toPage_page1() {
+                    layui.use(['laypage'], function () {
+                        var laypage = layui.laypage;
+                        var limit = limitValue_page1;
+                        laypage.render({
+                            elem: 'paged1',
+                            count: dataLength_page1,
+                            limit: limit,
+                            curr: currentPage_page1,
+                            skip: true,
+                            jump: function (obj, first) {
+                                currentPage_page1 = obj.curr;
+                                startIndex_page1 = (obj.curr - 1) * obj.limit;
+                                if (!first) {
+                                    getdata_page1();
+                                }
+                            }
+                        });
+                    });
+                }
+        </script>
+        <hr class="layui-bg-green">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>出库记录</legend>
+        </fieldset>
+        <!--出库状态和查询-->
+        <div>
+            <form class="layui-form  layui-form-pane">
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">清单查询</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" style="width: 350px;" >
+                            <input class="layui-input" id="searchValue" name="searchValue" type="text" placeholder="请输入条形码、商品名" value="" />
+                        </div>
+
+                        <a id="searchButton" class="layui-btn" >查询</a>
+                        <a href="/outhouse_manage" class="layui-btn">刷新</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>出库编号</th>
+                        <th>商品名字</th>
+                        <th>条形码</th>
+                        <th>出库数量</th>
+                        <th>出库日期</th>
+                        <th>出库状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table">
+                        <!--插入动态数据-->
+                </tbody>
+            </table>
+            <div id="paged" class="" style="text-align: center"></div>
+        </div>
+
+    </body>
+    <script>
+            //分页参数设置
+            var startIndex = 0;//记录开始的索引
+            var limitValue = 10;//每页显示的记录条数
+            var currentPage = 1; //当前页数
+            var dataLength = 0; //数据总条数
+            var token = '@CSRF.getToken.value';
+            $(document).ready(function () {
+                //ajax请求数据
+                getdata();
+                //点击搜索时 搜索数据
+                $("#searchButton").click(function () {
+                    getdata();
+                    currentPage = 1; //当点击搜索的时候，应该回到第一页
+                    toPage();//然后进行分页的初始化
+
+                });
+                //分页渲染
+                toPage();
+            });
+
+            function getdata() {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/outhouse_page2_list?csrfToken=" + token,
+                    data: {
+                        start: startIndex,
+                        limit: limitValue,
+                        searchValue: $("#searchValue").prop("value")
+                    },
+                    success: function (data, status) {
+                        dataLength = data.total;
+                        parse_table(data.data);
+                    }
+                });
+            }
+
+            function parse_table(data) {
+                var rows = "";
+                $.each(data, function (v, o) {
+                    rows += '<tr><td>' + o.outstockId + '</td>';
+                    rows += '<td>' + o.merchName + '</td>';
+                    rows += '<td>' + o.barcode + '</td>';
+                    rows += '<td>' + o.merchNum + '</td>';
+                    rows += '<td>' + o.outDate + '</td>';
+                    rows += '<td>' + o.outState + '</td>';
+                    if (o.outState == '未出库') {
+                        rows += '<td><a href="/outhouse_update/' + o.outstockId + '"  class="layui-btn layui-btn-xs">完成出库</a></tr>';
+                    } else {
+                        rows += '<td>无需操作</td><tr>';
+                    }
+                });
+                if (data.length > 0) {
+                    $("#paged").show();
+                    $("#table").html(rows);
+                } else {
+                    $("#paged").hide();
+                    $("#table").html("<br><tr><td colspan='13'><h1 style='width:100%;height: 30px;display: block;text-align: center'><span>暂无出库的商品</span></h1></td></tr>");
+                }
+            }
+
+            function toPage() {
+                layui.use(['laypage'], function () {
+                    var laypage = layui.laypage;
+                    var limit = limitValue;
+                    laypage.render({
+                        elem: 'paged',
+                        count: dataLength,
+                        limit: limit,
+                        curr: currentPage,
+                        skip: true,
+                        jump: function (obj, first) {
+                            currentPage = obj.curr;
+                            startIndex = (obj.curr - 1) * obj.limit;
+                            if (!first) {
+                                getdata();
+                            }
+                        }
+                    });
+                });
+            }
+    </script>
+}

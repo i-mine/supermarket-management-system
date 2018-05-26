@@ -18,4 +18,13 @@ object JsonFormats {
   implicit val orderFormat = Json.format[Order]
   implicit val orderPageFormat = Json.format[Page[Order]]
   implicit val stockinFormat = Json.format[StockIn]
+
+  implicit val inhouseFormat = Json.format[InHouseView]
+  implicit val inhousePageFormat = Json.format[Page[InHouseView]]
+
+  implicit val outshelfFormat = Json.format[OutShelfView]
+  implicit val outshelfPageFormat = Json.format[Page[OutShelfView]]
+
+  implicit val outhouseFormat = Json.format[OutHouseView]
+  implicit val outhousePageFormat = Json.format[Page[OutHouseView]]
 }

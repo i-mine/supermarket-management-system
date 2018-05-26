@@ -36,7 +36,7 @@ class OrderDBService @Inject()(orderDaoImpl: OrderDaoImpl) {
 		orderDaoImpl.update(newOrder)
 	}
 
-	def count(searValue: String): Int = {
-		orderDaoImpl.getCount(searValue)
+	def count(searchValue: String): Int = {
+		orderDaoImpl.getCount(searchValue)
 	}
 }

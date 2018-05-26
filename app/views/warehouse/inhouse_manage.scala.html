@@ -1,0 +1,143 @@
+@import helper._
+@(title: String)(implicit request: RequestHeader)
+@layout(title) {
+    <body class="layui-container" style="width: 90%;">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>入库清单</legend>
+        </fieldset>
+            <!--页面主体开始-->
+        <div>
+            <form class="layui-form  layui-form-pane">
+                <div class="layui-form-item" style="display: inline-block">
+                    <label class="layui-form-label">清单查询</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" style="width: 350px;" >
+                            <input class="layui-input" id="searchValue" name="searchValue" type="text" placeholder="请输入条形码、商品名" value="" />
+                        </div>
+
+                        <a id="searchButton" class="layui-btn" >查询</a>
+                        <a href="/inhouse_manage" class="layui-btn">刷新</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <fieldset class="layui-elem-field">
+            <legend>说明</legend>
+            <div class="layui-field-box">
+                <ul>
+                    <li><p>入库完成可以点击完成入库，此外入库日期若为1970-01-01则表示未完成入库</p></li>
+                </ul>
+            </div>
+        </fieldset>
+        <hr class="layui-bg-green">
+        <table class="layui-table">
+            <colgroup>
+                <col width="100">
+                <col width="200">
+                <col width="150">
+                <col width="200">
+                <col width="150">
+                <col width="150">
+                <col width="150">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>订单/入库编号</th>
+                    <th>商品名字</th>
+                    <th>条形码</th>
+                    <th>入库数量</th>
+                    <th>入库日期</th>
+                    <th>入库状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+                    <!--插入动态数据-->
+            </tbody>
+        </table>
+        <div id="paged" class="" style="text-align: center"></div>
+        <script>
+                //分页参数设置
+                var startIndex = 0;//记录开始的索引
+                var limitValue = 10;//每页显示的记录条数
+                var currentPage = 1; //当前页数
+                var dataLength = 0; //数据总条数
+                var token = '@CSRF.getToken.value';
+                $(document).ready(function () {
+                    //ajax请求数据
+                    getdata();
+                    //点击搜索时 搜索数据
+                    $("#searchButton").click(function () {
+                        getdata();
+                        currentPage = 1; //当点击搜索的时候，应该回到第一页
+                        toPage();//然后进行分页的初始化
+
+                    });
+                    //分页渲染
+                    toPage();
+                });
+
+                function getdata() {
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/inhouse_page_list?csrfToken=" + token,
+                        data: {
+                            start: startIndex,
+                            limit: limitValue,
+                            searchValue: $("#searchValue").prop("value")
+                        },
+                        success: function (data, status) {
+                            dataLength = data.total;
+                            parse_table(data.data);
+                        }
+                    });
+                }
+
+                function parse_table(data) {
+                    var rows = "";
+                    $.each(data, function (v, o) {
+                        rows += '<tr><td>' + o.instockId + '</td>';
+                        rows += '<td>' + o.merchName + '</td>';
+                        rows += '<td>' + o.barcode + '</td>';
+                        rows += '<td>' + o.merchNum + '</td>';
+                        rows += '<td>' + o.inDate + '</td>';
+                        rows += '<td>' + o.inState + '</td>';
+                        if(o.inState == '未入库'){
+                            rows += '<td><a href="inhouse_update/' + o.instockId + '"  class="layui-btn layui-btn-xs update">完成入库</a></tr>';
+                        }else {
+                            rows += '<td>无需操作</td><tr>';
+                        }
+                    });
+                    if (data.length > 0) {
+                        $("#paged").show();
+                        $("#table").html(rows);
+                    } else {
+                        $("#paged").hide();
+                        $("#table").html("<br><tr><td colspan='13'><h1 style='width:100%;height: 30px;display: block;text-align: center'><span>暂无需要入库的商品</span></h1></td></tr>");
+                    }
+                }
+
+                function toPage() {
+                    layui.use(['laypage'], function () {
+                        var laypage = layui.laypage;
+                        var limit = limitValue;
+                        laypage.render({
+                            elem: 'paged',
+                            count: dataLength,
+                            limit: limit,
+                            curr: currentPage,
+                            skip: true,
+                            jump: function (obj, first) {
+                                currentPage = obj.curr;
+                                startIndex = (obj.curr - 1) * obj.limit;
+                                if (!first) {
+                                    getdata();
+                                }
+                            }
+                        });
+                    });
+                }
+        </script>
+    </body>
+}

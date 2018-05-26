@@ -51,13 +51,15 @@ class MerchDaoImpl @Inject()()(dbConfigProvider: DatabaseConfigProvider) extends
 			val limit = args.apply(1).toInt
 			val arg = args.apply(2)
 			if(arg.equals("")){//初次加载页面或者没有输入搜索参数时，返回所有
-				return db.run(merchInfos.result)
+				return db.run(merchInfos.drop(start).take(limit).result)
 			}
 			val likeArg = "%"+ arg + "%"
 			val sql = sql"""select * from merch_info where merch_name like $likeArg or barcode = $arg or merchtype_id = $arg or provide_id = $arg  limit $start,$limit"""
 			db.run(sql.as[Merch])
 		} else {
-			db.run(merchInfos.result)
+			val start = args.apply(0).toInt
+			val limit = args.apply(1).toInt
+			db.run(merchInfos.drop(start).take(limit).result)
 		}
 	}
 

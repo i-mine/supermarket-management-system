@@ -70,10 +70,11 @@ class OrderDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
 		* @return
 		*/
 	override def listAll(args: String*): Future[Seq[Order]] = {
-		val orderListSql = sql"""select instock_id,barcode,merch_num,merch_price,plan_date,arrive_state from stock_in_record where plan_date <> "null" and arrive_state = 0 and plan_date > '1970-01-01'""".as[Order]
+		//默认至少两个参数
+		val start = args.apply(0).toInt
+		val limit = args.apply(1).toInt
+		val orderListSql = sql"""select instock_id,barcode,merch_num,merch_price,plan_date,arrive_state from stock_in_record where plan_date <> "null" and arrive_state = 0 and plan_date > '1970-01-01' limit $start,$limit""".as[Order]
 		if (args.length == 3) {
-			val start = args.apply(0).toInt
-			val limit = args.apply(1).toInt
 			val arg = args.apply(2)
 			if (arg.equals("")) {
 				return db.run(orderListSql)
@@ -99,7 +100,7 @@ class OrderDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends H
 
 	override def getCount(searchArg: String) = {
 		if (searchArg.equals("")) {
-			Await.result(db.run(sql"""select COUNT(*) from stock_in_record where plan_date<>"null"""".as[Int]), Duration.Inf).headOption.get
+			Await.result(db.run(sql"""select COUNT(*) from stock_in_record where  plan_date > '1970-01-01' and plan_date<>"null"""".as[Int]), Duration.Inf).headOption.get
 
 		}else{
 			val likeArg = "%"+ searchArg + "%"

@@ -64,7 +64,7 @@ class OrderController @Inject()(cc: ControllerComponents, dBService: DBService) 
   def orderUpdate() = Action.async{implicit request: Request[AnyContent] =>
     val data = updateForm.bindFromRequest().get
     dBService.order_DB.updateOrder(data).map(
-      res => Redirect("order_manage")
+      res => Redirect("/order_manage")
     )
   }
 

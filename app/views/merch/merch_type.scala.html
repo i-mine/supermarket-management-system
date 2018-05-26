@@ -45,14 +45,14 @@
                             <a class="layui-btn layui-btn-xs"  onclick="update('@merchType.merchTypeId ','@merchType.merchTypeName')">更新</a></td>
                         </tr>
                         <script>
-                            $("body").on("click","#add_@merchType.merchTypeId",function () {
-                                var num = '@merchType.merchTypeNum';
-                                if(num === '0'){
-                                    alert("you can delete");
-                                }else{
-                                    alert("you can not delete");
-                                }
-                            });
+                                  $("body").on("click","#add_@merchType.merchTypeId",function () {
+                                      var num = '@merchType.merchTypeNum';
+                                      if(num === '0'){
+                                          return confirm('确定删除?');
+                                      }else{
+                                          alert("对不起，该商品类别下已录入商品信息，禁止删除！");
+                                      }
+                                  });
                         </script>
                     }
                 </tbody>
