@@ -165,4 +165,16 @@ class MerchController @Inject()(cc: ControllerComponents, dBService: DBService) 
 		)
 	}
 
+	def merchSale(id: Long) = Action.async(
+		dBService.merch_DB.alowSale(id).map(
+			res => Redirect("/merch_manage")
+		)
+	)
+
+	def merchForbid(id: Long) = Action.async(
+		dBService.merch_DB.forbidSale(id).map(
+			res => Redirect("/merch_manage")
+		)
+	)
+
 }

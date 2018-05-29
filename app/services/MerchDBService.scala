@@ -35,8 +35,17 @@ class MerchDBService @Inject()(merchDaoImpl: MerchDaoImpl) {
 	def updateMerch(updateMerch: UpdateMerch): Future[String] = {
 		merchDaoImpl.update(updateMerch)
 	}
+
 	def count(searchValue: String): Int = {
 		merchDaoImpl.getCount(searchValue)
+	}
+
+	def alowSale(id: Long): Future[Int] = {
+		merchDaoImpl.alowSale(id)
+	}
+
+	def forbidSale(id: Long): Future[Int] = {
+		merchDaoImpl.forbidSale(id)
 	}
 
 

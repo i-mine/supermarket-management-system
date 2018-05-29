@@ -21,5 +21,5 @@ trait MerchDao {
 	//更新商品信息
 	def update(newMerch: UpdateMerch): Future[String]
 	//获取不同搜索条件下录入商品的数量
-	def getCount(searchArg: String):Int
+	def getCount(searchArg: String): Int
 }

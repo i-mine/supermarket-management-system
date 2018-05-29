@@ -15,7 +15,7 @@ import scala.concurrent.{Await, Future}
   * date: 2018-05-17
   * desc: 
   */
-class MemberDaoImpl @Inject()()(dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfig[JdbcProfile] with MemberInfoSchema with MemberDao{
+class MemberDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfig[JdbcProfile] with MemberInfoSchema with MemberDao{
   override protected val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig.profile.api._

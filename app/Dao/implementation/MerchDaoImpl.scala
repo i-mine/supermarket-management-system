@@ -83,4 +83,13 @@ class MerchDaoImpl @Inject()()(dbConfigProvider: DatabaseConfigProvider) extends
 			 Await.result(db.run(sql.as[Int]), Duration.Inf).headOption.get
 		}
 	}
+
+	//允许销售
+	def alowSale(id: Long): Future[Int] = {
+		db.run(merchInfos.filter(_.merchId === id).map(_.alowSale).update(true))
+	}
+	//禁止销售
+	def forbidSale(id: Long):Future[Int]= {
+		db.run(merchInfos.filter(_.merchId === id).map(_.alowSale).update(false))
+	}
 }

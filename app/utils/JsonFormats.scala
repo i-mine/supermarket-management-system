@@ -27,4 +27,8 @@ object JsonFormats {
 
   implicit val outhouseFormat = Json.format[OutHouseView]
   implicit val outhousePageFormat = Json.format[Page[OutHouseView]]
+
+  implicit val promotionFormat = Json.format[Promotion]
+  implicit val promotionPageFormat = Json.format[Page[Promotion]]
+  implicit val strategyFormat = Json.format[Strategy]
 }

@@ -24,9 +24,6 @@ class OrderDBService @Inject()(orderDaoImpl: OrderDaoImpl) {
 		orderDaoImpl.get(id)
 	}
 
-	def listOrder(): Future[Seq[Order]] = {
-		orderDaoImpl.listAll()
-	}
 
 	def getPage(start: String, limit: String, searchValue: String): Future[Seq[Order]] = {
 		orderDaoImpl.listAll(start, limit, searchValue)

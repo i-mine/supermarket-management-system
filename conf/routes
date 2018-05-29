@@ -45,6 +45,8 @@ POST        /merch_add                      controllers.MerchController.merchAdd
 GET         /merch_delete/:id               controllers.MerchController.merchDelete(id: Long)
 POST        /merch_update                   controllers.MerchController.merchUpdate()
 POST        /merch_get                      controllers.MerchController.merchGet()
+GET         /merch_sale/:id                 controllers.MerchController.merchSale(id: Long)
+GET         /merch_forbid/:id               controllers.MerchController.merchForbid(id: Long)
 #进货管理
 GET         /order_manage                   controllers.OrderController.orderManage()
 POST        /order_page_list                controllers.OrderController.orderPage()
@@ -62,5 +64,12 @@ POST        /outhouse_page1_list            controllers.WareHouseController.outH
 POST        /outhouse_page2_list            controllers.WareHouseController.outHousePage2()
 GET         /outhouse_insert                controllers.WareHouseController.insertOutHouse(barcode: String,merchNum: Int)
 GET         /outhouse_update/:id            controllers.WareHouseController.outHouseUpdate(id: Long)
+#销售管理
+GET         /promotion_manage               controllers.SaleController.promotionManage()
+POST        /promotion_page_list            controllers.SaleController.promotionPage()
+POST        /strategy_get                   controllers.SaleController.strategyGet()
+POST        /strategy_update                controllers.SaleController.strategyUpdate()
+POST        /strategy_add                   controllers.SaleController.strategyAdd()
+GET         /strategy_delete/:id            controllers.SaleController.strategyDelete(id: Long)
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
