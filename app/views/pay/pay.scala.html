@@ -1,0 +1,123 @@
+@import helper._
+@(title: String)(implicit request: RequestHeader)
+@layout(title) {
+    <body class="layui-container">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>收银</legend>
+        </fieldset>
+        <div id="first-container">
+            <form id="add_form" class="layui-form  layui-form-pane">
+                <div class="layui-form-item" style="display: inline-block;
+                    margin-right: 20px;
+                    float: left;">
+                    <label class="layui-form-label">条形码</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" style="" >
+                            <input class="layui-input" id="barcode" name="barcode" type="text" placeholder="请输入商品条形码" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: inline-block;">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" >
+                            <input class="layui-input" id="num" name="num" type="text" placeholder="请输入数量" value="" />
+                        </div>
+                        <a id="" class="layui-btn" >添加</a>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="display: block">
+                    <label class="layui-form-label">会员</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" >
+                            <input class="layui-input" id="num" name="num" type="text" placeholder="请输入会员账号" value="" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr class="layui-bg-green">
+        <div id="second-container" style="border: 1px solid;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .6);
+            max-height: 300px;
+            overflow-y: auto">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>条形码</th>
+                        <th>商品名</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>折扣</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table1">
+                        <!--插入动态数据-->
+                    <tr>
+                        <td>1234567890163</td>
+                        <td>薄荷柠檬皂</td>
+                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
+                        <td>2.50</td>
+                        <td>0.8</td>
+                        <td>6.0 元</td>
+                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td>1234567890133</td>
+                        <td>P&G肥皂</td>
+                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
+                        <td>2.50</td>
+                        <td>0.8</td>
+                        <td>6.0 元</td>
+                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td>12345694523</td>
+                        <td>雕牌肥皂</td>
+                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
+                        <td>2.50</td>
+                        <td>0.8</td>
+                        <td>6.0 元</td>
+                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td>1234567890167</td>
+                        <td>舒肤佳肥皂</td>
+                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
+                        <td>2.50</td>
+                        <td>0.8</td>
+                        <td>6.0 元</td>
+                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="third-container" style="margin-top: 20px;">
+            <form id="pay_form" class="layui-form" style="">
+                <h2 style="display: inline-block;
+                    float: left;
+                    margin-top: 5px;"><span>总金额:24.00元</span></h2>
+
+                <div style="display: inline-block;
+                    float: left;
+                    margin-right: 40px;">
+                    <label class="layui-form-label">支付</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" style="" >
+                            <input class="layui-input" id="pay" name="pay" type="text" placeholder="请输入实际支付金额" value="" />
+                        </div>
+                    </div>
+                </div>
+                <button class="layui-btn" type="submit" style="display: inline-block;
+                    float: left">结账</button>
+                <h2 style="display: inline-block;
+                    float: left;
+                    margin: 5px 40px;">找零：<span>76.00元</span></h2>
+            </form>
+        </div>
+    </body>
+}

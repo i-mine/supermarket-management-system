@@ -42,7 +42,7 @@ class MemberDaoImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends 
     if(args.length == 1){
       //实现search查询,args这里只有一个，即电话号码
       val arg = args.apply(0)
-      return db.run(memberInfos.filter(_.memberPhone.like(s"%$arg%")).result)
+      return db.run(memberInfos.filter(_.memberPhone === arg).result)
     }
     //实现分页查询
     if(args.length == 2){
