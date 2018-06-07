@@ -97,12 +97,12 @@
                             <input type="checkbox" name="sale_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
                         </div>
                     </div>
-                    <div class="layui-form-item authority">
-                        <label class="layui-form-label">系统管理</label>
-                        <div class="layui-input-block checkbox-div-@staff.staffId">
-                            <input type="checkbox" name="system_manage" lay-skin="switch" lay-text="ON|OFF" value="1">
-                        </div>
-                    </div>
+                    @*<div class="layui-form-item authority">*@
+                        @*<label class="layui-form-label">系统管理</label>*@
+                        @*<div class="layui-input-block checkbox-div-@staff.staffId">*@
+                            @*<input type="checkbox" name="system_manage" lay-skin="switch" lay-text="ON|OFF" value="1">*@
+                        @*</div>*@
+                    @*</div>*@
                     <div class="layui-form-item authority" style="margin-left: 50%;">
                         @CSRF.formField
                     <button lay-submit class="layui-btn" lay-filter="filter_@staff.staffId">更新权限</button>
