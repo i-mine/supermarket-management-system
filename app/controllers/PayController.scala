@@ -4,6 +4,7 @@ import javax.inject._
 import models._
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 import play.api.mvc._
 import services.DBService
 
@@ -23,5 +24,17 @@ class PayController @Inject()(cc: ControllerComponents, dBService: DBService) ex
       case '1' => Ok(views.html.pay.pay("收银"))
       case _ => Redirect("/noAuthority")
     }
+  }
+
+    val addForm = Form(
+      single("barcode" -> nonEmptyText)
+    )
+  def goodsGet() = Action.async{implicit request: Request[AnyContent] =>
+    import utils.JsonFormats.goodsFormat
+    val barcode = addForm.bindFromRequest().get
+    dBService.pay_DB.getGoods(barcode).map(
+      data =>
+        Ok(Json.toJson[Goods](data.get))
+    )
   }
 }

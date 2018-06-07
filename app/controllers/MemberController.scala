@@ -67,6 +67,19 @@ class MemberController @Inject()(cc: ControllerComponents, dBService: DBService)
 		)
 	}
 
+	def memberCheck() = Action.async{implicit request: Request[AnyContent] =>
+		val seachForm= Form(single("member_phone" -> text))
+		val memberPhone = seachForm.bindFromRequest().get
+		dBService.member_DB.search(memberPhone).map(
+			res=> if(res.isEmpty){
+				Ok("false")
+			}else{
+				Ok("true")
+			}
+		)
+
+	}
+
 	def memberUpdate() = Action.async{implicit request: Request[AnyContent] =>
 		val memberUpdateForm = Form(
 			tuple(

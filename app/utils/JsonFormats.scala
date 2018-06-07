@@ -31,4 +31,6 @@ object JsonFormats {
   implicit val promotionFormat = Json.format[Promotion]
   implicit val promotionPageFormat = Json.format[Page[Promotion]]
   implicit val strategyFormat = Json.format[Strategy]
+
+  implicit val goodsFormat = Json.format[Goods]
 }

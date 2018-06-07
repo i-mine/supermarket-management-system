@@ -1,7 +1,7 @@
 @import helper._
 @(title: String)(implicit request: RequestHeader)
 @layout(title) {
-    <body class="layui-container">
+    <body class="layui-container" style="">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
             <legend>收银</legend>
         </fieldset>
@@ -21,21 +21,84 @@
                     <label class="layui-form-label">数量</label>
                     <div class="layui-input-block">
                         <div class="layui-input-inline" >
-                            <input class="layui-input" id="num" name="num" type="text" placeholder="请输入数量" value="" />
+                            <input class="layui-input" id="num" name="num" type="text" placeholder="请输入数量" value="1" />
                         </div>
-                        <a id="" class="layui-btn" >添加</a>
-                    </div>
-                </div>
-                <div class="layui-form-item" style="display: block">
-                    <label class="layui-form-label">会员</label>
-                    <div class="layui-input-block">
-                        <div class="layui-input-inline" >
-                            <input class="layui-input" id="num" name="num" type="text" placeholder="请输入会员账号" value="" />
-                        </div>
+                        <a id="add_goods" class="layui-btn" >添加</a>
                     </div>
                 </div>
             </form>
         </div>
+        <script>
+                var token = '@CSRF.getToken.value';
+                $('body').on('click', '#add_goods', function () {
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/goods_get?csrfToken=" + token,
+                        data: {
+                            barcode: $("#barcode").prop("value")
+                        },
+                        success: function (data, status) {
+                            parse_table(data);
+                            calculate();
+                            $("#barcode").prop("value","");
+                        }
+                    });
+                });
+
+                function parse_table(data) {
+                    var row = "";
+                    var num = $("#num").prop("value");
+                    row += '<tr id=' + data.barcode + '><td>' + data.barcode + '</td>';
+                    row += '<td>' + data.merchName + '</td>';
+                    row += '<td id="num_' + data.barcode + '"><i class="fas fa-plus" onclick="num_plus(' + data.barcode + ')"></i>&nbsp;<span>' + num + '</span>&nbsp;<i class="fas fa-minus" onclick="num_minus(' + data.barcode + ')"></i></td>';
+                    row += '<td id="sale_price_' + data.barcode + '">' + data.salePrice + '</td>';
+                    row += '<td id="discount_' + data.barcode + '">' + data.saleDiscount + '</td>';
+                    row += '<td id="price_' + data.barcode + '" class="price">' + (data.saleDiscount * data.salePrice * num).toFixed(2) + '</td>';
+                    row += '<td><button class="layui-btn layui-btn-xs" onclick="goods_delete(' + data.barcode + ')">删除</button></td></tr>';
+                    $("#table").append(row);
+                }
+
+                function calculate() {
+                    var total_price = 0;
+                    $('.price').each(function () {
+                        total_price += $(this).text() * 1;
+                    });
+                    $("#total_price").text(total_price);
+                }
+
+                function goods_delete(barcode) {
+                    $("#" + barcode).remove();
+                    calculate();
+                }
+
+                function num_plus(barcode) {
+                    var num = $("#num_" + barcode).find("span").text();
+                    num++;
+                    var discount = $("#discount_" + barcode).text();
+                    var sale_price = $("#sale_price_" + barcode).text();
+                    var price = (discount * sale_price * num).toFixed(2);
+                    $("#num_" + barcode).find("span").text(num);
+                    $("#price_" + barcode).text(price);
+                    calculate();
+                }
+
+                function num_minus(barcode) {
+                    var num = $("#num_" + barcode).find("span").text();
+                    num--;
+                    if (num < 0) {
+                        num = 0;
+                    }
+                    var discount = $("#discount_" + barcode).text();
+                    var sale_price = $("#sale_price_" + barcode).text();
+                    var price = (discount * sale_price * num).toFixed(2);
+                    $("#num_" + barcode).find("span").text(num);
+                    $("#price_" + barcode).text(price);
+                    calculate();
+                }
+
+        </script>
+
         <hr class="layui-bg-green">
         <div id="second-container" style="border: 1px solid;
             padding: 20px;
@@ -55,53 +118,29 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="table1">
+                <tbody id="table">
                         <!--插入动态数据-->
-                    <tr>
-                        <td>1234567890163</td>
-                        <td>薄荷柠檬皂</td>
-                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
-                        <td>2.50</td>
-                        <td>0.8</td>
-                        <td>6.0 元</td>
-                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
-                    </tr>
-                    <tr>
-                        <td>1234567890133</td>
-                        <td>P&G肥皂</td>
-                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
-                        <td>2.50</td>
-                        <td>0.8</td>
-                        <td>6.0 元</td>
-                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
-                    </tr>
-                    <tr>
-                        <td>12345694523</td>
-                        <td>雕牌肥皂</td>
-                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
-                        <td>2.50</td>
-                        <td>0.8</td>
-                        <td>6.0 元</td>
-                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
-                    </tr>
-                    <tr>
-                        <td>1234567890167</td>
-                        <td>舒肤佳肥皂</td>
-                        <td><i class="fas fa-plus"></i>&nbsp;<span>3</span>&nbsp;<i class="fas fa-minus"></i></td>
-                        <td>2.50</td>
-                        <td>0.8</td>
-                        <td>6.0 元</td>
-                        <td><a class="layui-btn layui-btn-xs">删除</a></td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
+        <br>
+        <hr class="layui-bg-green">
         <div id="third-container" style="margin-top: 20px;">
-            <form id="pay_form" class="layui-form" style="">
-                <h2 style="display: inline-block;
-                    float: left;
-                    margin-top: 5px;"><span>总金额:24.00元</span></h2>
+            <div id="pay_form" class="layui-form layui-form-pane" style="">
+                <div class="layui-form-item" style="display: block">
+                    <label class="layui-form-label">会员</label>
+                    <div class="layui-input-block">
+                        <div class="layui-input-inline" >
+                            <input class="layui-input" id="member_phone" name="member_phone" type="text" placeholder="请输入会员账号" value="" />
+                        </div>
+                        <a id="discount" class="layui-btn">会员折扣</a>
+                    </div>
+                </div>
 
+                <h1 style="display: block;
+                    margin-top: 5px;"><span>总金额:<span id="total_price">0.00</span>元</span></h1>
+                <br>
                 <div style="display: inline-block;
                     float: left;
                     margin-right: 40px;">
@@ -112,12 +151,89 @@
                         </div>
                     </div>
                 </div>
-                <button class="layui-btn" type="submit" style="display: inline-block;
-                    float: left">结账</button>
-                <h2 style="display: inline-block;
+                <a id="pay_submit" class="layui-btn" style="display: inline-block;
+                    float: left">结账</a>
+                <h1 id="change" style="display: inline-block;
                     float: left;
-                    margin: 5px 40px;">找零：<span>76.00元</span></h2>
-            </form>
+                    margin: 5px 40px;">找零：<span>0.00</span>元</h1>
+            </div>
         </div>
+        <hr class="layui-bg-green">
+        <br>
+        <div style="text-align: center;
+            clear: both;
+            padding-top: 40px;">
+            <a href="/pay" class="layui-btn">结束购买</a>
+        </div>
+        <script>
+                var token = '@CSRF.getToken.value';
+                //计算会员折扣后的总金额
+                $('body').on('click', '#discount', function () {
+                    var member_phone = $("#member_phone").prop("value");
+                    console.log(member_phone+"1");
+                    if (member_phone !="") {
+                        var check_result = check(member_phone);
+                        console.log(check_result);
+                        if (check_result) {
+                            calculate_member();
+                        }
+                    }
+
+                });
+                //点击结账后的动作
+                $('body').on('click', '#pay_submit', function () {
+                    calculate_change();
+                });
+                // $('body').on('click','#pay_submit',function(){
+                //     $.ajax({
+                //         type: "post",
+                //         async: false,
+                //         url: "/pay_record?csrfToken=" + token,
+                //         data: {
+                //             barcode: $("#barcode").prop("value")
+                //         },
+                //         success: function () {
+                //
+                //         }
+                //     });
+                // });
+
+                //计算找零
+                function calculate_change() {
+                    var total_price = $("#total_price").text();
+                    var pay = $("#pay").prop("value");
+                    var change = pay - total_price;
+                    if (change < 0) {
+                        alert("支付金额不足");
+                    } else {
+                        $("#change").find("span").text(change.toFixed(2));
+                    }
+
+                }
+                //检测是否是会员
+                function check(member_phone) {
+                    var reuslt = false;
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/member_check?csrfToken=" + token,
+                        data: {
+                            member_phone: member_phone
+                        },
+                        success: function (data, status) {
+                            reuslt = data;
+                        }
+                    });
+                    return reuslt;
+                }
+                //计算会员折扣金额
+                function calculate_member() {
+                    var total_price = 0;
+                    $('.price').each(function () {
+                        total_price += $(this).text() * 1;
+                    });
+                    $("#total_price").text((total_price * 0.95).toFixed(2));
+                }
+        </script>
     </body>
 }

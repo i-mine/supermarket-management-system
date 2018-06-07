@@ -33,6 +33,7 @@ POST        /member_add                     controllers.MemberController.memberA
 GET         /member_delete/:id              controllers.MemberController.memberDelete(id: Long)
 POST        /member_get                     controllers.MemberController.memberGet()
 POST        /member_update                  controllers.MemberController.memberUpdate()
+POST        /member_check                   controllers.MemberController.memberCheck()
 # 商品管理
 GET         /merchType_list                 controllers.MerchController.merchTypeList()
 POST        /merchType_add                  controllers.MerchController.merchTypeAdd()
@@ -73,5 +74,6 @@ POST        /strategy_add                   controllers.SaleController.strategyA
 GET         /strategy_delete/:id            controllers.SaleController.strategyDelete(id: Long)
 #收银
 GET         /pay                            controllers.PayController.payPage()
+POST        /goods_get                      controllers.PayController.goodsGet()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
