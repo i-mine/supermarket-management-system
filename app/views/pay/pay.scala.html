@@ -182,15 +182,21 @@
                 });
                 //点击结账后的动作
                 $('body').on('click', '#pay_submit', function () {
-                    calculate_change();
+                 calculate_change();
                 });
                 // $('body').on('click','#pay_submit',function(){
+                //     calculate_change();
+                //     var record = "";
+                //     $("#table tr").each(function () {
+                //
+                //     });
                 //     $.ajax({
                 //         type: "post",
                 //         async: false,
                 //         url: "/pay_record?csrfToken=" + token,
                 //         data: {
-                //             barcode: $("#barcode").prop("value")
+                //             record: record,
+                //             member_phone:$("#member_phone").prop("value")
                 //         },
                 //         success: function () {
                 //

@@ -121,8 +121,8 @@
                         rows += '<td>' + o.cautionNum + '</td>';
                         rows += '<td>' + o.selfNum + '</td>';
                         rows += '<td>' + o.selfPreNum + '</td>';
-                        rows += '<td>' + o.merchPrice + '</td>';
-                        rows += '<td>' + o.salePrice + '</td>';
+                        rows += '<td>' + (o.merchPrice).toFixed(2) + '</td>';
+                        rows += '<td>' + (o.salePrice).toFixed(2) + '</td>';
                         rows += '<td>' + o.provideId + '</td>';
                         rows += '<td><a href="javascript:void(0)"  class="layui-btn layui-btn-xs update" onclick="update(' + o.merchId + ')" style="margin-top: 10px">修改</a><span> </span>';
                         if(o.alowSale){
